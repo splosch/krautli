@@ -1,0 +1,675 @@
+<!DOCTYPE html> 
+<html>
+  <head> 
+    <meta name = "viewport" content = "width = device-width">
+    <link rel="stylesheet" href="design_resources/screen.css" media="screen" type="text/css" />
+    <script src="jquery.js"></script>    
+    <script src="data_resources/herb_data.js"></script>
+    <script src="jquery.autocomplete.js"></script>
+    
+    <script src="http://isithackday.com/hacks/geo/yql-geo-library/yqlgeo.js"></script>
+    <script src="js/test.js"></script>
+        <script src="js/modernizr-1.7.min.js"></script>
+    
+</head>
+
+  <body>    
+    <style>
+
+            
+        datalist{
+            display:none;
+        }
+        input#herbalName{
+            width: 298px;
+            border: 2px solid #999;
+            margin-right: -1px;
+            display: inline-block;
+        }
+        
+        .ac_results ul, .ac_results li{
+            list-style:none;
+            padding: 0;
+            margin:0;
+        }
+        
+        .ac_results li.ac_over{
+            background-color: rgba(100, 210, 100, 1);
+        }
+        
+        .ac_results ul{
+            background-color: rgba(230, 250, 210, 1);
+            padding: 3px;
+            border: 2px solid #999;
+            border-top:none;
+            border-radius: 0px 0px 8px 8px;
+        }
+        
+        code, pre {
+            font-family: console, monospace, courier;
+            white-space: pre;
+            font-size: small;
+        }
+    </style>
+    
+    <div id="pagewrapper">
+    
+    <section id="krautli" class="app region">
+        <!-- missing form for server request instead of Clientside Javascript -->
+        <label for="herbalName">Pflanzenname:</label>
+        <input id="herbalName" type="text" list="herbalNames" autocomplete="off" refId="" />
+        
+        <button id="btnInit" class="log"><span>Fundort speichern</span></button>
+    </section>    
+
+    <!-- Todo: Selfcheck on datalist & storage & location api-->
+    <script type="text/javascript">
+    var suggestedHerbs = [], db;
+    
+    /*
+        as an performant improvement, provide data-storage on capable browsers offline storage
+    */
+        function initLocalHerbs(ha){
+//["Url http://www.kaesekessel.de/kraeuter/", "geschützt", "Name", "Jan", "Feb", "März", "Apr", "Mai", "Jun", "Jul", "Aug", "Sept", "Okt", "Nov", "Dez", "Gefahr", "Anwendung", "Gebiete"]
+            
+            // Todo: move to server side (evtl.) This Object can be provided by Server - Cliend side parsing is for Prototyping only
+            var hObjs = {};
+            
+            for(h in ha){
+                hObjs[h] = {};
+                hObjs[h]["url"] = ha[h][0];
+                hObjs[h]["protected"] = ha[h][1] === "" ? false : true;
+                hObjs[h]["name"] = ha[h][2];
+                hObjs[h]["cal"] = [];
+                hObjs[h]["hazardous"] = ha[h][15];
+                hObjs[h]["usage"] = ha[h][16];
+                hObjs[h]["loc_desc"] = ha[h][17];
+                
+                //fill calender month
+                for(i = 3; i < 15; i++){
+                    hObjs[h]["cal"].push(ha[h][i] || "");
+                }
+
+                //push global suggestions (not goood :))
+                if (h != 0){
+                    suggestedHerbs.push({name : ha[h][2], refId : h});
+                }
+            }
+        
+            return hObjs;
+        }
+    
+        /*
+         * Clientside support for suggesting Herbals by name while typing
+         * this function uses a datalist to provide browserpowered suggestions
+         * for browsers not capable of the datalist feature usage of a gapfiller is provided
+         */
+        function suggestHerbals(hObjs){
+            var dataListId = "herbalNameData";
+            
+            $("#herbalName").after("<datalist id='"+dataListId+"'></datalist>");
+            
+            for(h in hObjs){
+                //skip the first (not the best implementation to always exec that condition...)
+                if(h != 0 && hObjs[h] && hObjs[h].name){
+                    $("#"+dataListId).append("<option refId='"+h+"' value='"+hObjs[h].name+"' />");
+                }
+            }
+        }
+    
+        //get herb data || send message that no data is available
+        var herbs = herbs || [];
+        herbs = initLocalHerbs(herbs);
+        
+        // Todo: restrictions for execution--> build datalist - this should be only done if AJAX powered async data fetching && datalist feature available, otherwise use autosuggest or server side datalist rendering
+        suggestHerbals(herbs);
+        
+        
+        $().ready(function() {
+
+            // only use this approach if datalist with included autosuggest is not available
+            // Todo: modernizer etc - check
+            $("#herbalName").autocomplete(suggestedHerbs, {
+                matchContains: true,
+                width:300,
+                scrollHeight: false,
+                minChars: 0,
+                max: false,
+                autoFill: false,
+                formatItem: function(row, i, max) {
+                    return row.name + " °" + row.refId;
+                }, 
+                formatMatch: function(row, i, max) {
+                    return row.name;
+                },
+                formatResult: function(row) {
+                    return row.name;
+                }
+            });
+            
+            
+            
+            
+            
+            
+            if(Modernizr.websqldatabase && Modernizr.geolocation){
+                db = db?db:initDB();
+                jQuery(window).ready(function(){
+                    jQuery("#btnInit").click(initiate_geolocation);
+                    //jQuery("#btnGetData").click(getAllPlants);
+                });
+            }else{
+                console.error("No WebSQL Support");
+            }
+        });
+    </script>
+    
+    <section id="progress" class="doc region">
+        <h4>Some Topics I'm currently dealing with</h4>
+        <ul id="topics">
+            <li><a href="#info_localStorage">API: LocalStorage</a> : Key/Value based data storage</li>
+            <li><a href="#code_eventEmitter">Codestyle: Event System</a> : emit & dispatch Events or Messages</li>
+            <li><a href="#code_websql">API: DataStorage, a WebSQL Database</a> : store data on Client required for <a href="#info_offlineMode">offline mode</a></li>
+            <li><a href="#code_geolocation">API: Geolocation</a> : store current geoposition along with the plants</li>
+            <li><a href="#code_autosuggest">UI: Autosuggest</a> : allow suggestion of plant names while typing</li>
+            <li><a href="#code_initLocalHerbs">Data: Prepare Plant Data</a> : csv to <a href="#data_resources/herb_data.js" target="_blank">simple array</a> to object</li>
+            <li><a href="#info_interfaceDesign">UI: the Interface Design</a> : stuff to considder while planning the html / ui</li>
+    		<li><a href="#info_herbalAppIdea">Idea: Kräutli-App</a> : What? Why? How?</li>
+        </ul>
+        
+		
+		<article id="info_localStorage">
+            <h4>API: LocalStorage</h4>
+			<p class="caption">
+				Key/Value based data storage explained by Oliver Cadwell: <a href="http://olivercaldwell.co.uk/2011/09/experimenting-with-localstorage/" target="_blank">Experimenting with LocalStorage</a>, check out the codesample @ <a href="https://gist.github.com/1246292">gist.github</a><br>
+				here a reduced excerpt from the sample:
+			</p>
+			<code>
+/**
+ * A persistant object class using localStorage
+ * 
+ * Copyright Oliver Caldwell 2011 (olivercaldwell.co.uk)
+ * http://olivercaldwell.co.uk/?p=89
+ */
+function PersistantObject(key) {
+	// Store the key
+	this.setKey(key);
+
+	// Initialise the data as an empty object
+	this.data = {};
+
+	// Load the data
+	this.load();
+}
+
+/**
+ * ... and some methods to use
+ */
+PersistantObject.prototype.setKey = function(key) {...};
+PersistantObject.prototype.load   = function() {...};
+PersistantObject.prototype.erase  = function() {...};
+PersistantObject.prototype.save   = function() {...};				
+			</code>
+		</article> 
+		 
+		 
+        
+		<article id="code_eventEmitter">
+            <h4>Event System: emit & dispatch Events / Messages</h4>
+			<p class="caption">
+				Like <user>maxthelion</user> wrote in the <a href="http://blog.new-bamboo.co.uk/2010/1/26/why-your-javascript-apps-need-more-structure" target="_blank">Post about more structured JS Apps</a>:
+			</p>
+			<q href="http://blog.new-bamboo.co.uk/2010/1/26/why-your-javascript-apps-need-more-structure" pagepos="h2'Custom Events'">
+				<strong>Custom Events</strong><br>
+				These are really the heart of building great extensible UIs. This means utilising the Observer pattern in your objects. I also like to think of it in pubsub terms: a custom event has 2 parts, the trigger (publisher), and the events which are bound to it (subscribers).<br>
+				Create a convention for events which you are going to stick to...
+			</q>
+			
+            <p>
+				My App-internal communication wishlist:
+				<ul>
+					<li>loose, but bound to app communication</li>
+					<li>bind listeners, emit or trigger the release of events, nesting:have callbacks that emit by themself  </li>
+					<li>"I don't care who is listening, but I send anyways"</li>
+					<li>"let's listen - mybe someone's transmitting" -> central & decentral listening</li>
+					<li>transmit tiny bits of data, e.g. statuscodes & errors</li>
+					<li>you mean like <a href="http://nodejs.org/" target="_blank">node.js</a> does it?</li>
+				</ul>
+            </p>
+            <p class="caption">
+                Eventhandling like Sammy.js implements it <a href="http://sammyjs.org/docs/events">http://sammyjs.org/docs/events</a><br>
+				Not implemented but I defenitely try it out
+            </p>
+            <code>
+			</code>
+			<ul class="links">
+				<li>Check out the app-context-bound <a href="http://sammyjs.org/docs/events">event system of Sammy.js</a> - very similar to the jQuery one</li>
+				<li>I think I won't pick it but anyway some good place to learn: EventEmitter by Oliver Caldwell (<a href="www.olivercaldwell.co.uk">olivercaldwell.co.uk</a>) -> <a href="https://github.com/Wolfy87/EventEmitter">GitHub: EventEmitter</a></li>
+				<li>again a nice Post from the Bamboo Blog about <a href="http://moro.heroku.com/2010/7/14/custom-event-emitters-in-javascript">Custom event emitters in Javascript</a></li>
+			</ul>
+		</article>
+		
+		
+        
+        <article id="code_websql">
+            <h4>DataStorage: WebSQL Database to store data on Client (Offline mode by default)</h4>
+            <p>
+                Since the whole application should be able to run on the User phone without the immediate need to communicate back to the server, we need a way to store users data & application data on the clientside.<br>
+                The Data should be persisted and datarelation is needed to reference e.g. plantnames & their synonyms, as well as their positiondata & harvesting information.
+                I picked the WebSQL DB build in Webkit Browsers like Chrome or Safari, but like to have a look on other systems too - the "worst" fallback would be the Synchronous communication back to the Server which implements a DB on its own. (*bähh*)
+            </p>
+            <p class="caption">
+                initialize the database, trigger Table initialization, 'some' errorhandling
+            </p>
+            <code>
+function initDB(){
+    try {
+        if (!window.openDatabase) {
+            console.error('Your Browser doesnt support the used SQLite DB API');
+        } else {
+            var shortName = 'mydatabase',
+                version = '1.0',
+                displayName = 'My Important Database',
+                maxSize = 65536,
+                db = openDatabase(shortName, version, displayName, maxSize);
+                // You should have a database instance in db.
+            
+            createTables(db);
+            return db;
+        }
+    } catch(e) {
+        // Error handling code goes here.
+        if (e === 2) {
+            // Version number mismatch.
+            console.warning("Invalid database version.");
+        } else {
+            console.warning("Unknown error "+e+".");
+        }
+        return null;
+    }
+}            
+            </code>
+            
+            <p class="caption">
+                helper methods for db & query handling
+            </p>
+            <code>
+function nullDataHandler(transaction, results) { 
+    //
+}
+        
+function errorHandler(transaction, error)
+{
+    alert('Oops.  Error was '+error.message+' (Code '+error.code+')');
+    // Handle errors here
+    var we_think_this_error_is_fatal = true;
+    if (we_think_this_error_is_fatal){ 
+        return true;
+    }
+
+    return false;
+}
+
+function dataHandler(transaction, results)
+{
+    var i,row;
+    // Handle the results
+    var string = "Pos:\n\n";
+    for (i=0; i&lt;results.rows.length; i++) {
+        // Each row is a standard JS array indexd by
+        // column names.
+        row = results.rows.item(i);
+        string = string + " (ID "+row['id']+" "+row['pos_long']+" "+row['pos_lat']+")\n";
+    }
+    alert(string);
+}
+        </code>
+            
+        <p class="caption">
+            create the initial tables
+        </p>
+        <code>
+function createTables(db){
+    if(db){
+        db.transaction(
+            function (transaction) {
+                /* The first query causes the transaction to (intentionally) fail if the table exists. */
+                transaction.executeSql('CREATE TABLE IF NOT EXISTS plantpositions(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL DEFAULT "Pflanze", pos_long NUMBER NOT NULL DEFAULT "0.0", pos_lat NUMBER NOT NULL DEFAULT "0.0");', [], nullDataHandler, errorHandler);
+                /* These insertions will be skipped if the table already exists. */
+                transaction.executeSql('insert into plantpositions (name, pos_long, pos_lat) VALUES ("Ref_Pos", "0.12345", "-1.2345");', [], nullDataHandler, errorHandler);
+            }
+        );
+        console.log("createTables - SUCCESS");
+    }
+    else{
+        console.Error("createTables(db) - FAILED - No DB found");
+    }
+}
+        </code>
+            
+        <p class="caption">
+            Yeahhh! Do something with the Data // storePlantPos & getAllPlants
+        </p>
+        <code>
+function storePlantPos(db, position, plantObj){
+    if(db){
+        plantname = plantObj.name?plantObj.name:"Pflanze_X";
+    
+        db.transaction(
+            function (transaction) {
+                transaction.executeSql('insert into plantpositions (name, pos_long, pos_lat) VALUES ("'+plantname+'", "'+position.coords.longitude+'", "'+position.coords.latitude+'");', [], nullDataHandler, errorHandler);
+                console.log("inserted "+plantname+" "+position.coords.longitude+" "+position.coords.latitude);
+            }
+        );
+    }
+    else{
+        console.Error("storePlantPos(db, position, plantname) - FAILED - No DB found");
+    }
+}
+        
+function getAllPlants(){
+    db.transaction(
+        function (transaction) {
+            transaction.executeSql("SELECT * from plantpositions",
+                [], // array of values for the ? placeholders
+                dataHandler, errorHandler);
+        }
+    );
+}
+        </code>
+           
+		<ul class="links">
+			<li>WebSQL basics 1st <a href="http://html5doctor.com/introducing-web-sql-databases/"  target="_blank">Introducing WebSQL Databases/</a></li>
+			<li>WebSQL basics 2nd <a href="http://marakana.com/forums/html5/general/208.html" target="_blank">HTML5 related APIs : WebSQL</a></li>
+		</ul>
+	</article>
+    
+        <article id="code_geolocation">
+            <h4>Location API: store the plantposition</h4>
+            <p>
+                main feature of the "Kräutli"-App is to store geoposition of plants to find these spots again and eventually share them. Device & Browser-dependent featuresupport might require different ways to get the geoposition.<br>
+                native pasthrough of the devices current gps data to the browser is what I want, unfortunately some devices dont have gps & some Browsers don't allow pass trough - to ease the effort on that I use the <a href="http://isithackday.com/hacks/geo/yql-geo-library/">yql-geo-library</a>
+            </p>
+            <p class="caption">get the dependencies...</p>
+            <code>
+&lt;script src="http://isithackday.com/hacks/geo/yql-geo-library/yqlgeo.js"&gt;&lt;/script&gt;                
+            </code>
+            <p class="caption">
+                gps data from the navigator.geolocation || network based position aquiry via yqlgeo library<br>
+                handle_geolocation_query callback handles display, errorhandling, further actions (storing in local DB etc.)<br>
+                Good docu of the geoposition script: <a href="http://isithackday.com/hacks/geo/yql-geo-library/" target="_blank">yql-geo-library </a>
+            </p>
+            <code>
+function initiate_geolocation() {
+    if (navigator.geolocation)
+    {
+        navigator.geolocation.getCurrentPosition(handle_geolocation_query, handle_error);
+    }
+    else
+    {
+        yqlgeo.get('visitor', normalize_yql_response);
+    }
+}
+
+function handle_geolocation_query(position){
+    if (!position.error){
+        var image_url = "http://maps.google.com/maps/api/staticmap?sensor=false&amp;center=" + position.coords.latitude + ',' + position.coords.longitude + 
+                        "&amp;zoom=14&amp;size=300x400&amp;markers=color:blue|label:S|" + position.coords.latitude + ',' + position.coords.longitude;
+
+        jQuery("#map").remove();
+        jQuery(document.body).append(
+            jQuery(document.createElement("img")).attr("src", image_url).attr('id','map')
+        );
+    }else{
+        // handle a visual position-error
+        updateUIMessages("warning", position.error);
+    }
+
+    storePlantPos(db, position, getChoosenPlant());
+}    
+            </code>
+        </article>
+    
+        <article id="code_autosuggest">
+            <h4>UI: autosuggest / autocomplete</h4>
+            <p>This feature was in main focus even in the beginning of the Project becaus eit helps to get an idea of how to handle all the different herbs, without bothering the user too much with typing (*mobile device pain*)</p>
+            <p class="caption">requires jquery.autocomplete.js by Dylan Verheul, unfortunately this plugin requires jQuery 1.2.6, once running I deal with that... *maybe :)</p>
+            <code>
+&lt;script src="jquery.autocomplete.js"&gt;&lt;/script&gt;
+            </code>
+            
+            <p class="caption">
+                This currently gets the autosuggest Plugin running. <br>
+                The initial approach was to use the <a href="http://www.roseindia.net/tutorial/html/html5/HTML5DatalistTag.html"  target="_blank">HTML5 datalist feature</a> (<a href="http://www.quackit.com/html_5/tags/html_datalist_tag.cfm">datalist demo</a>) that builds up hidden list of possible obtions that the user can enter in the input-field. Since the support for that feature is not that great :(, and no lightweight <a href="https://github.com/Modernizr/Modernizr/wiki/HTML5-Cross-Browser-Polyfills">datalist polyfill (search for "datalist")</a>
+                <br>
+                Actually the current Script tries to allow the Datalist to work - so I fill the datalist...
+            </p>
+            <p class="caption">
+                the autosuggest plugin gets some cleaned up version of the suggested herbs<br>
+                *better: get them from the datalist or at least the same source object to avoid this messy code/data duplication 
+            </p>
+            <code>
+function initLocalHerbs(ha){
+    .
+    .
+    .
+    //push global suggestions (not goood :))
+    if (h != 0){
+        suggestedHerbs.push({name : ha[h][2], refId : h});
+    }
+}
+
+/*
+ * Clientside support for suggesting Herbals by name while typing
+ * this function uses a datalist to provide browserpowered suggestions
+ * for browsers not capable of the datalist feature usage of a gapfiller is provided
+ */
+function suggestHerbals(hObjs){
+    var dataListId = "herbalNameData";
+    
+    $("#herbalName").after("&lt;datalist id='"+dataListId+"'&gt;&lt;/datalist&gt;");
+    
+    for(h in hObjs){
+        //skip the first (not the best implementation to always exec that condition...)
+        if(h != 0 && hObjs[h] && hObjs[h].name){
+            $("#"+dataListId).append("&lt;option refId='"+h+"' value='"+hObjs[h].name+"' /&gt;");
+        }
+    }
+}
+            </code>
+            <p class="caption">Html rendered Output for HTML 5 datalist support (*just prepared, not working yet)</p>
+            <code>
+&lt;label for="herbalName"&gt;Pflanzenname:&lt;/label&gt;
+&lt;input id="herbalName" type="text" list="herbalNameData" autocomplete="off"&gt;
+
+&lt;datalist id="herbalNameData"&gt;
+    &lt;option refid="1" value="Ackergauchheil"&gt;&lt;/option&gt;
+    &lt;option refid="2" value="Ackerschachtelhalm"&gt;&lt;/option&gt;
+    &lt;option refid="3" value="Ackerwinde"&gt;&lt;/option&gt;
+    &lt;option refid="4" value="Acker-Witwenblume"&gt;&lt;/option&gt;
+    &lt;option refid="5" value="Alant"&gt;&lt;/option&gt;
+    &lt;option refid="6" value="Ampfer, Sauerampfer"&gt;
+    .
+    .
+    .
+&lt;/datalist&gt;
+            </code>
+            <p class="caption">run the autosuggest dropdown</p>
+            <code>
+suggestHerbals(herbs);
+
+$().ready(function() {
+    // only use this approach if datalist with included autosuggest is not available
+    $("#herbalName").autocomplete(suggestedHerbs, {
+        matchContains: true,
+        width:300,
+        scrollHeight: false,
+        minChars: 0,
+        max: false,
+        autoFill: false,
+        formatItem: function(row, i, max) {
+            return row.name + " °" + row.refId;
+        }, 
+        formatMatch: function(row, i, max) {
+            return row.name;
+        },
+        formatResult: function(row) {
+            return row.name;
+        }
+    });
+
+    // ...
+});
+            </code>
+            
+        </article>
+		
+		<article id="code_initLocalHerbs">
+			<h4>Data: some example plants to work with</h4>
+			<p>
+				Data: Sample Data for Herbals, I used the data and structured it with Excel ;) <a href="http://www.kaesekessel.de/kraeuter/" target="_blank">http://www.kaesekessel.de/kraeuter/</a>
+				The data used belongs to its owner, I do not claim any rights on the raw data. This application is for educational purpose only, there is no commercial use, nor is there any commercial use planned.
+			</p>
+            <p class="caption">initLocalHerbs() is still a mess - not only because I pollute the global scope. Once I have an idea if this thing works this will be part of the apps namespace</p>
+            <code>
+function initLocalHerbs(ha){
+//SOURCE: ["Url http://www.kaesekessel.de/kraeuter/", "geschützt", "Name", "Jan", "Feb", "März", "Apr", "Mai", "Jun", "Jul", "Aug", "Sept", "Okt", "Nov", "Dez", "Gefahr", "Anwendung", "Gebiete"]
+    
+    // Todo: move to server side (evtl.) This Object can be provided by Server - Cliend side parsing is for Prototyping only
+    var hObjs = {};
+    
+    for(h in ha){
+        hObjs[h] = {};
+        hObjs[h]["url"] = ha[h][0];
+        hObjs[h]["protected"] = ha[h][1] === "" ? false : true;
+        hObjs[h]["name"] = ha[h][2];
+        hObjs[h]["cal"] = [];
+        hObjs[h]["hazardous"] = ha[h][15];
+        hObjs[h]["usage"] = ha[h][16];
+        hObjs[h]["loc_desc"] = ha[h][17];
+        
+        //fill calender month
+        for(i = 3; i &lt; 15; i++){
+            hObjs[h]["cal"].push(ha[h][i] || "");
+        }
+
+        //push global suggestions (not goood :))
+        if (h != 0){
+            suggestedHerbs.push({name : ha[h][2], refId : h});
+        }
+    }
+
+    return hObjs;
+}
+            </code>        
+        </article>
+        
+		<article id="info_interfaceDesign">
+            <h4>UI: the Interface Design</h4>
+            <p>
+				<b>form follows function</b> - at least this time I try to go with that principle.<br>
+				Still, the frontend is very simple, and I'd like to keep it like that untill really needed changes drive design decissions.
+				The Application should run on all kinds of plattform (device/browser) so there will be various ways how to display things...
+			<p>
+			
+			<ul class="links">
+				<li>Dealing with all kinds of possible layouts - a simple boilerplate: <a href="http://www.getskeleton.com">http://www.getskeleton.com</a></li>
+			<ul>
+		</article>	
+
+		
+        <article id="info_herbalAppIdea">
+            <h4>Idea: What? Why? How?</h4>
+            <p>
+				This tool is a self-lerning-project to show what's possible with a non-device-spcific coding approach that shows all kind of new features implemented in the latest browsers. The Code will be fully documented and will go through various levels of refactoring and improvements.<br>
+				With following this project YOU should be aware of the possibilities and limitations of the HTML5 + all the APIs going hand in hand (*sometimes). <br>
+				Please don't bash us for writing bad code in a horrible style with absolute no structure - this will change within that project.<br>
+				This HTML & JS Application is ment to be a helper tool for dudes & maa's that like to collect herbals and like to build up a collection of nice places where to find them.<br>
+				These are the main features I'm aiming for
+				<ol class="todo">
+					<li >Select Plants
+						<ul>
+							<li class="done">Avoid extra typing effort (autocomplete / suggestions) (DONE)</li>
+							<li class="later">Provide all needed Data for offline usage (*not yet)</li>
+							<li class="maybe">Select Synonyms of Plantnames (*maybe)</li>
+							<li class="later">provide new Plantnames (*not yet)</li>
+							<li class="later">"name later" - entry, only together with notes & images / considder bulk naming of multiple entries (*not yet)</li>
+							<li class="muchlater">Fallback: server side handling of unknown plants or other processing</li>
+						</ul>
+					</li>
+					<li>Get the position of the Place where you found the Plant
+						<ul>
+							<li class="done">Use GPS Position (DONE)</li>
+							<li class="later">make sure this works offline (*not yet)</li>
+							<li class="fix">Fallback 1: use network based Positioning (*buggy)</li>
+							<li class="later">Fallback 2: select position manually (freetext, gps, pinpoint on a map, ...) (*not yet)</li>
+							<li class="maybe">Fallback 3: no position (e.g. for creating new plants) (*maybe)</li>
+						</ul>
+					</li>
+					<li>Store the Position of the Plant
+						<ul>
+							<li class="fix">Store everything on Clientside (*half done / buggy)</li>
+							<li class="later">Allow upload of Data per Customer (*not yet)</li>
+							<li class="maybe">Private / Public entries (*maybe)</li>
+							<li class="done">make sure this works offline (*DONE)</li>
+							<li class="maybe">Fallback 1: try LocalStorage for WebSQL fallback(*maybe)</li>
+							<li class="maybe">Fallback 2: allow direct Save on Serverside (*maybe)</li>
+						</ul>
+					</li>
+					<li>Display stored Plants
+						<ul>
+							<li class="done">display the last saved position (DONE + disabled)</li>
+							<li class="later">display all Plants in Textform</li>
+							<li class="later">display all Plants on a Map</li>
+							<li class="later">display only selected Plants on a Map</li>
+							<li class="muchlater">filter Plants by (Erntezeitpunkt Pflanzenteile, etc)</li>
+							<li class="maybe">make this offline ?? (possible?)</li>
+							<li class="maybe">display shared Plantlocations by other users</li>
+						</ul>
+					</li>
+					<li>Other Functions
+						<ul>
+							<li class="muchlater"> edit / delete Plants</li>
+							<li class="muchlater">approve / mark wrong shared locations</li>
+							<li class="muchlater">store notes & images along with the position</li>
+						</ul>
+					</li>
+					<li>Technical Requests
+						<ul>
+							<li class="fix">Get a functional Prototype working (somehow)</li>
+							<li class="muchlater">clean package structuring within a Git Project</li>
+							<li class="maybe">OOP & MVC </li>
+							<li class="later">Event based Interaction on Client & Server Side</li>
+							<li class="muchlater">Integrate node.js server for correspondence & fallback support</li>
+						</ul>
+					</li>
+				</ol>
+					
+			</p>            
+        </article>
+        
+
+    
+        <section id="reference">
+            <h4>Links and Resources for further reading</h4>
+            <ul id="links">
+                <li>HTML5 Polyfills @ Github <a href="https://github.com/Modernizr/Modernizr/wiki/HTML5-Cross-Browser-Polyfills" target="_blank">HTML5-Cross-Browser-Polyfills</a></li>
+                <li>cloud9ide an "use everywhere IDE" with Github integration <a href="http://c9.io/" target="_blank">http://c9.io/</a></li>
+				<li>js-model is a library built on top of jQuery that allows you to work with models <a href="http://benpickles.github.com/js-model/" target="_blank">Github: js-model/</a></li>
+				<li>Adding a Model layer to your Javascript / MVC <a href="http://blog.new-bamboo.co.uk/2010/3/7/the-js-model-layer" target="_blank">the-js-model-layer</a></li>
+				
+				
+            </ul>
+        </section>
+    
+    </section>
+	
+	<footer>
+		<div class="wrapper">
+			<a href="mailto:sploscho@web.de" title="send mail for kraeutli contact">Mario Winkler</a>
+		</div>
+	</footer>
+
+    </div>
+  </body>
+</html>

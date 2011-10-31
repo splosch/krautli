@@ -1,0 +1,87 @@
+
+<html>
+<head>
+    <title>Event Emitter test</title>
+	<script src="EventEmitter.js" />
+</head>
+
+<body>
+	<ul id="messages">		
+	</ul>
+	
+	<button id="pushMsg">Generate Message</button>
+	
+	
+	<script>
+	/*
+		// Initialise the EventEmitter
+		var ee = new EventEmitter();
+
+		// Initialise the listener function
+		function myListener() {
+			console.log('The foo event was emitted.');
+		}
+
+		ee.addListener('foo', myListener);
+		ee.emit('foo');
+		ee.removeListener('foo', myListener);
+		console.log(ee.listeners('foo'));
+		
+*/
+
+//#################################################		
+		// prepare the Emitting Object
+		var Ticker = function( interval ){
+			var self = this, 
+			nextTick = function(){
+				self.emit('tick', [Math.random(1000)]);
+				setTimeout(nextTick, interval);
+			}
+			
+			nextTick();
+		};
+		
+		// Extend from EventEmitter 'addListener' and 'emit' methods
+		Ticker.prototype = new EventEmitter();
+		
+		// A ticker instance with an interval of 5 seconds
+		var ticktock = new Ticker( 5000 );
+		
+		// Bind an event handler to the 'tick' event
+		ticktock.addListener('tick', function( number ) {
+			console.log('number emitted: '+ number);
+		});
+		
+		
+
+	
+/*	
+	
+		var EventEmitter = require('events').EventEmitter,
+			puts = require('sys').puts;
+
+		var Ticker = function( interval ){
+		  var self = this, 
+			  nextTick = function(){
+			self.emit('tick', Math.random(1000));
+			setTimeout(nextTick, interval);
+		  }
+
+		  nextTick();
+		};
+
+		// Extend from EventEmitter 'addListener' and 'emit' methods
+		Ticker.prototype = new EventEmitter;
+
+		// A ticker instance with an interval of 5 seconds
+		var ticktock = new Ticker( 5000 );
+
+		// Bind an event handler to the 'tick' event
+		ticktock.addListener('tick', function( number ) {
+		  puts('number emitted: '+ number);
+		});
+*/		
+		
+		</script>
+</body>
+<html>

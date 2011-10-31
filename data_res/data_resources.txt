@@ -1,0 +1,20 @@
+Rezepte etc.
+http://www.bund-garten.de/index.php?id=89
+
+Data for Saison based Harvesting / Collecting Plantparts
+http://www.kaesekessel.de/kraeuter/
+
+Browser, User & Other Events and how they behave in Webpages
+http://dev.opera.com/articles/view/timing-and-synchronization-in-javascript/
+
+MVC Javascript Framework
+http://code.google.com/p/objs/source/browse/trunk/demos/puremvc_javascript_port/?r=4#puremvc_javascript_port%2Fpuremvc%2Fsrc%2Forg%2Fpuremvc%2Fjs%2Fpatterns%2Ffacade%253Fstate%253Dclosed
+
+Reduced Version of Objs / MVC / OOP Framework
+https://github.com/tekool/objs/blob/master/src/Objs.js
+MVC
+http://blog.new-bamboo.co.uk/2010/1/26/why-your-javascript-apps-need-more-structure
+
+
+Event Emitters && Event Listeners example with link to Server sided Backup
+http://moro.heroku.com/2010/7/14/custom-event-emitters-in-javascript
