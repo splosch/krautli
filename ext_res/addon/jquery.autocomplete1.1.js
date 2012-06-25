@@ -382,6 +382,12 @@ $.Autocompleter = function(input, options) {
 	function stopLoading() {
 		$input.removeClass(options.loadingClass);
 	};
+    
+    if(krautliApp){
+        krautliApp.trigger('statusMsg', {type:"initApp", msg:"Eingabehilfe für die Suche aktiviert.", log:"DONE: Autocompleter Plugin started."});
+    }else{
+        krautliApp.trigger('errorError', {type:"initApp", log:"FAIL: Autocomplete Plugin did not find the krautliApp"});
+    }
 
 };
 

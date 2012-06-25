@@ -1,45 +1,147 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-
-  <title>Hello World</title>
-
-  <style type="text/css" media="screen">
-
-  </style>
-
-  <script src="../../ext_res/lib/jquery1.4.2min.js" type="text/javascript" charset="utf-8"></script>
-  <script src="../../ext_res/lib/sammy0.7.js" type="text/javascript" charset="utf-8"></script>
-  <script type="text/javascript" charset="utf-8">
-    ;(function($) {
-      var app = $.sammy(function() {
-
-        this.get('#/', function() {
-          $('#main').text('');
-        });
-
-        this.get('#/test', function() {
-          $('#main').text('Hello World');
-        });
-
-      });
-
-      $(function() {
-        app.run()
-      });
-    })(jQuery);
-  </script>
-
+    <title>Hello World</title>
+    <link rel="stylesheet" href="../../css/screen.css" media="screen" type="text/css"></link>
+    <script src="../../ext_res/lib/jquery1.4.2.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../ext_res/lib/sammy0.7.js" type="text/javascript" charset="utf-8"></script>
 </head>
 
 <body>
-  <div id="container">
-    <div id="main">
-    </div>
-    <ul id="link">
-      <li><a href="#/test">Click me!</a></li>
-      <li><a href="#/">Back</a></li>
-    </div>
-  </div>
+
+<div id="pagewrapper">
+    <section class="region">
+        <h4>First Sammy Example</h4>
+        <p class="caption">Clicking the Links changes the URL - and Sammy get()'s that to trigger different events</p>
+        <code>
+    (function($) {
+        var krautliApp = $.sammy(function() {
+    
+            this.get('#/', function() {
+                $('#main').text('');
+            });
+    
+            this.get('#/test', function() {
+                $('#main').text('Hello World');
+            });
+    
+        });
+    
+        $(function() {
+            krautliApp.run()
+        });
+    })(jQuery);
+        </code>
+        
+       
+       <!-- Here we Go Sammy the 1st -->
+        <script>
+            ;
+            (function($) {
+                var krautliApp2 = $.sammy(function() {
+            
+                    this.get('#/', function() {
+                        $('#main').text('');
+                    });
+            
+                    this.get('#/test', function() {
+                        $('#main').text('Hello World');
+                    });
+            
+                });
+            
+                $(function() {
+                    krautliApp2.run()
+                });
+            })(jQuery);
+        </script>
+     
+        <p id="main">Hello Sammy!</p>
+        <ul id="link">
+            <li><a href="#/test">Click me!</a></li>
+            <li><a href="#/">Back</a></li>
+        </ul>
+        
+    </section>
+    
+    <section class="region">
+        <article>
+            <h4>Second One now some more Events...</h4>
+            <p class="caption">According to the <a href="http://sammyjs.org/docs/api/0.7.0/all#Sammy.Application-APP_EVENTS" >Sammy Api#App_Events</a> - An array of the default events triggered by the application during its lifecycle</p>
+            <code>
+APP_EVENTS = ['run', 'unload', 'lookup-route', 'run-route', 'route-found', 'event-context-before', 'event-context-after', 'changed', 'error', 'check-form-submission', 'redirect', 'location-changed']        
+            </code>
+            
+            <!-- Sammy go and get the Event -->
+            <script>
+                ;
+                (function($) {
+                    var krautliApp = $.sammy(function() {
+                
+                        this.get('#/', function() {
+                            $('#main').text('');
+                        });
+                
+                        this.get('#/test', function() {
+                            $('#main').text('Hello World');
+                        });
+                        
+                        // Do this when no route defined:
+                        this.get('', function(context) {
+                            // No route defined, set location to '#/' to trigger app automatically:
+                            document.location.hash = '/';
+                        });
+                        
+                        // Catch-all for 404 errors:
+                            this.get(/.*/, function() { 
+                            console.log('404... come on, really?');
+                        });
+                        
+                        
+                        this.bind('errorMsg', function(e, data){console.log("error callback");});
+                        this.bind('statusMsg', function(e, data){console.log("status callback");});
+                        
+                        // listen to all events
+                        this.bindToAllEvents(function(e, data) {
+                            $('#eventlist').append("<li>"+ e.type +"</li>");
+                        });
+                
+                    });
+                
+                    $(function() {
+                        krautliApp.run()
+                        $("#emitError").bind("click", function(e){
+                            console.log("error emitted");
+                            krautliApp.trigger('errorMsg');                
+                        });
+                        
+                        
+                        $("#emitStatus").bind("click", function(e){
+                            console.log("status emitted");
+                            krautliApp.trigger('statusMsg');                
+                        });
+                    });
+                })(jQuery);
+            </script>
+            
+            <h5>Echoing all Event names in the App:</h5>
+            <div id="main">Hello Sammy!</p>
+            <ul id="link">
+                <li><a href="#/test">Click me!</a></li>
+                <li><a href="#/">Back</a></li>
+            </ul>
+            <button id="emitError">emit Error Event</button>
+            <button id="emitStatus">emit Status Event</button>
+            <ul id="eventlist">
+                <!-- here all of the events fired should be listed up -->
+            </ul>
+        
+        </article>
+
+    </section>
+</div>        
+
+
 </body>
+
 </html>

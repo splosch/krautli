@@ -1,5 +1,118 @@
+var MyHerbStuff = function (app){
+
+/*
+    as an performant improvement, provide data-storage on capable browsers offline storage
+    //["Url http://www.kaesekessel.de/kraeuter/", "geschützt", "Name", "Jan", "Feb", "März", "Apr", "Mai", "Jun", "Jul", "Aug", "Sept", "Okt", "Nov", "Dez", "Gefahr", "Anwendung", "Gebiete"]
+    // Todo: move to server side (evtl.) This Object can be provided by Server - Cliend side parsing is for Prototyping only
+*/
+this.helpers({
+    initLocalHerbs: function(ha){
+        var herbData = {},
+            hObjs = {},
+            suggestedHerbs = [],
+            i;
+        
+        for(var h in ha){
+            hObjs[h] = {};
+            hObjs[h].url = ha[h][0];
+            hObjs[h].protectedPlant = ha[h][1] === "" ? false : true;
+            hObjs[h].name = ha[h][2];
+            hObjs[h].cal = [];
+            hObjs[h].hazardous = ha[h][15];
+            hObjs[h].usage = ha[h][16];
+            hObjs[h].loc_desc = ha[h][17];
+            
+            //fill calender month
+            for(i == 3; i < 15; i++){
+                hObjs[h].cal.push(ha[h][i] || "");
+            }
+    
+            //push global suggestions (not goood :))
+            if (h !== 0){
+                suggestedHerbs.push({name : ha[h][2], refId : h});
+            }
+        }
+    
+        herbData.obj = hObjs;
+        herbData.list = suggestedHerbs;
+    
+        if(herbData.obj && herbData.list){
+            app.trigger('statusMsg', {type:"initApp", msg:"Es stehen "+ herbData.list.length +" zur Verfügung.", log:"DONE: initLocalHerbs"});
+        }else{
+            app.trigger('errorMsg', {type:"initApp", msg:"Es wurden keine Pflanzendaten gefunden", log:"FAIL: initLocalHerbs"});        
+        }
+        return herbData;
+    }
+});
+
+/*
+ * Clientside support for suggesting Herbals by name while typing
+ * this function uses a datalist to provide browserpowered suggestions
+ * for browsers not capable of the datalist feature usage of a gapfiller is provided
+ */
+function renderDataListForHerbs(hObjs){
+    var dataListId = "herbalNameData";
+    
+    $("#herbalName").after("<datalist id='"+dataListId+"'></datalist>");
+    
+    for(var h in hObjs){
+        //skip the first (not the best implementation to always exec that condition...)
+        if(h !== 0 && hObjs[h] && hObjs[h].name){
+            $("#"+dataListId).append("<option refId='"+h+"' value='"+hObjs[h].name+"' />");
+        }
+    }
+    
+    if($("#"+dataListId).children().length > 0){
+        app.trigger('statusMsg', {type:"initApp", log:"DONE: renderDataListForHerbs -> #"+dataListId+" : "+$("#"+dataListId).children().length});
+    }else{
+        app.trigger('errorMsg', {type:"initApp", log:"FAIL: renderDataListForHerbs -> #"+dataListId});        
+    }
+}
+
+function initAutoSuggest(herbalList){
+    // only use this approach if datalist with included autosuggest is not available
+    // Todo: modernizer etc - check
+    $("#herbalName").autocomplete(herbalList, {
+        matchContains: true,
+        width:300,
+        scrollHeight: false,
+        minChars: 0,
+        max: false,
+        autoFill: false,
+        formatItem: function(row, i, max) {
+            return row.name + " °" + row.refId;
+        }, 
+        formatMatch: function(row, i, max) {
+            return row.name;
+        },
+        formatResult: function(row) {
+            return row.name;
+        }
+    });
+    
+    
+    if(Modernizr.websqldatabase){
+        app.trigger('statusMsg', {type:"support", msg:"", log:"DONE: renderDataListForHerbs -> #"+dataListId+" : "+$("#"+dataListId).children().length});
+    }else{
+        app.trigger('errorMsg', {type:"support", log:"FAIL: renderDataListForHerbs -> #"+dataListId});        
+    }
+    
+    
+    if(Modernizr.websqldatabase && Modernizr.geolocation){
+        db = db?db:initDB();
+        jQuery(window).ready(function(){
+            jQuery("#btnInit").click(initiate_geolocation);
+            //jQuery("#btnGetData").click(getAllPlants);
+        });
+    }else{
+        console.error("No WebSQL Support");
+    }
+
+}
+
+
 /* DB Tools    */
-		function getFirstMatchingPlantId(plantName){
+        function getFirstMatchingPlantId(plantName){
 			//to be implemented, get first matching herbal from a list by its name // might fail
 			var id;
 			id = $("#herbalNameData option[value='"+plantName+"']").attr("refId");
@@ -53,7 +166,7 @@
 				// Each row is a standard JS array indexd by
 				// column names.
 				row = results.rows.item(i);
-				string = string + " (ID "+row['id']+" "+row['pos_long']+" "+row['pos_lat']+")\n";
+				string = string + " (ID "+row.id+" "+row.pos_long+" "+row.pos_lat+")\n";
 			}
 			alert(string);
 		}
@@ -215,3 +328,4 @@
 					yqlgeo.get('visitor', normalize_yql_response);
 			}
 		}
+};

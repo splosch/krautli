@@ -1,167 +1,201 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html>
-  <head> 
-    <meta name = "viewport" content = "width = device-width">
-    <link rel="stylesheet" href="design_resources/screen.css" media="screen" type="text/css" />
-    <script src="jquery.js"></script>    
-    <script src="data_resources/herb_data.js"></script>
-    <script src="jquery.autocomplete.js"></script>
-    
+<head>
+    <link rel="stylesheet" href="css/screen.css" media="screen" type="text/css"></link>
+    <script src="ext_res/lib/jquery1.4.2.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="ext_res/lib/sammy0.7.js" type="text/javascript" charset="utf-8"></script>
+    <script src="data_res/herb_data.js"></script>
+    <script src="ext_res/addon/jquery.autocomplete1.1.js"></script>
     <script src="http://isithackday.com/hacks/geo/yql-geo-library/yqlgeo.js"></script>
-    <script src="js/test.js"></script>
-        <script src="js/modernizr-1.7.min.js"></script>
-    
+    <!--script src="js_view/main.js"></script-->
+    <script src="ext_res/lib/modernizr1.7.min.js"></script>
+ 
 </head>
 
-  <body>    
-    <style>
-
-            
-        datalist{
-            display:none;
-        }
-        input#herbalName{
-            width: 298px;
-            border: 2px solid #999;
-            margin-right: -1px;
-            display: inline-block;
-        }
-        
-        .ac_results ul, .ac_results li{
-            list-style:none;
-            padding: 0;
-            margin:0;
-        }
-        
-        .ac_results li.ac_over{
-            background-color: rgba(100, 210, 100, 1);
-        }
-        
-        .ac_results ul{
-            background-color: rgba(230, 250, 210, 1);
-            padding: 3px;
-            border: 2px solid #999;
-            border-top:none;
-            border-radius: 0px 0px 8px 8px;
-        }
-        
-        code, pre {
-            font-family: console, monospace, courier;
-            white-space: pre;
-            font-size: small;
-        }
-    </style>
+<body>
     
-    <div id="pagewrapper">
-    
+<div id="pagewrapper">
     <section id="krautli" class="app region">
-        <!-- missing form for server request instead of Clientside Javascript -->
         <label for="herbalName">Pflanzenname:</label>
-        <input id="herbalName" type="text" list="herbalNames" autocomplete="off" refId="" />
-        
-        <button id="btnInit" class="log"><span>Fundort speichern</span></button>
-    </section>    
-
-    <!-- Todo: Selfcheck on datalist & storage & location api-->
-    <script type="text/javascript">
-    var suggestedHerbs = [], db;
+        <input id="herbalName" type="text" list="herbalNames" autocomplete="off" refId="" /> 
+        <button id="btnInit" class="log">
+            <span>Fundort speichern</span>
+        </button>
+    </section>
     
-    /*
-        as an performant improvement, provide data-storage on capable browsers offline storage
-    */
-        function initLocalHerbs(ha){
-//["Url http://www.kaesekessel.de/kraeuter/", "geschützt", "Name", "Jan", "Feb", "März", "Apr", "Mai", "Jun", "Jul", "Aug", "Sept", "Okt", "Nov", "Dez", "Gefahr", "Anwendung", "Gebiete"]
-            
+    <section class="app region">
+        <ul id="messages">
+        </ul>
+    </section>
+        
+<script type="text/javascript">
+
+    var MyHerbStuff = function(app){
+        
+        this.helpers({
+            initLocalHerbs2: function(ha) {
+                console.log("helperFnc");
+                this.trigger('statusMsg', {type:"initApp", msg:"Hi I'm Krautlis Herbal Resource. ", log:"INIT: MyHerbStuff()"});    
+            }
+        });
+        
+    
+        
+        /*
+            as an performant improvement, provide data-storage on capable browsers offline storage
+            //["Url http://www.kaesekessel.de/kraeuter/", "geschützt", "Name", "Jan", "Feb", "März", "Apr", "Mai", "Jun", "Jul", "Aug", "Sept", "Okt", "Nov", "Dez", "Gefahr", "Anwendung", "Gebiete"]
             // Todo: move to server side (evtl.) This Object can be provided by Server - Cliend side parsing is for Prototyping only
-            var hObjs = {};
+        */
+        this.initLocalHerbs = function(ha){
+            this.trigger('statusMsg', {type:"initApp", log:"STARTED: initLocalHerbs ("+ha.length+")"});
+            var herbData = {},
+                hObjs = {},
+                suggestedHerbs = [],
+                i;
             
-            for(h in ha){
+            for(var h in ha){
                 hObjs[h] = {};
-                hObjs[h]["url"] = ha[h][0];
-                hObjs[h]["protected"] = ha[h][1] === "" ? false : true;
-                hObjs[h]["name"] = ha[h][2];
-                hObjs[h]["cal"] = [];
-                hObjs[h]["hazardous"] = ha[h][15];
-                hObjs[h]["usage"] = ha[h][16];
-                hObjs[h]["loc_desc"] = ha[h][17];
+                hObjs[h].url = ha[h][0];
+                hObjs[h].protectedPlant = ha[h][1] === "" ? false : true;
+                hObjs[h].name = ha[h][2];
+                hObjs[h].cal = [];
+                hObjs[h].hazardous = ha[h][15];
+                hObjs[h].usage = ha[h][16];
+                hObjs[h].loc_desc = ha[h][17];
                 
                 //fill calender month
-                for(i = 3; i < 15; i++){
-                    hObjs[h]["cal"].push(ha[h][i] || "");
+                for(i == 3; i < 15; i++){
+                    hObjs[h].cal.push(ha[h][i] || "");
                 }
-
+        
                 //push global suggestions (not goood :))
-                if (h != 0){
+                if (h !== 0){
                     suggestedHerbs.push({name : ha[h][2], refId : h});
                 }
             }
         
-            return hObjs;
-        }
-    
+            herbData.obj = hObjs;
+            herbData.list = suggestedHerbs;
+        
+            if(herbData.obj && herbData.list.length > 0){
+                app.trigger('statusMsg', {type:"initApp", msg:"Es stehen "+ herbData.list.length +" zur Verfügung.", log:"DONE: initLocalHerbs"});
+            }else{
+                app.trigger('errorMsg', {type:"initApp", msg:"Es wurden keine Pflanzendaten gefunden", log:"FAIL: initLocalHerbs"});        
+            }
+            return herbData;
+        };
+        
         /*
          * Clientside support for suggesting Herbals by name while typing
          * this function uses a datalist to provide browserpowered suggestions
          * for browsers not capable of the datalist feature usage of a gapfiller is provided
          */
-        function suggestHerbals(hObjs){
+        this.suggestHerbals = function(hObjs) {
+            this.trigger('statusMsg', {type:"initApp", log:"STARTED: suggestHerbals - building Suggestion List"});
             var dataListId = "herbalNameData";
-            
-            $("#herbalName").after("<datalist id='"+dataListId+"'></datalist>");
-            
-            for(h in hObjs){
+            $("#herbalName").after("<datalist id='" + dataListId + "'></datalist>");
+            for (h in hObjs) {
                 //skip the first (not the best implementation to always exec that condition...)
-                if(h != 0 && hObjs[h] && hObjs[h].name){
-                    $("#"+dataListId).append("<option refId='"+h+"' value='"+hObjs[h].name+"' />");
+                if (h != 0 && hObjs[h] && hObjs[h].name) {
+                    $("#" + dataListId).append("<option refId='" + h + "' value='" + hObjs[h].name + "' />");
                 }
             }
+            
+            if($("#" + dataListId).children()[0]){
+                app.trigger('statusMsg', {type:"initApp", msg:"Liste mit "+ $("#" + dataListId).children().length +" Kräutern erstellt.", log:"DONE: suggestHerbals"});
+            }else{
+                app.trigger('errorMsg', {type:"initApp", msg:"Es konnte keine Vorschläge erstellt werden.", log:"FAIL: suggestHerbals"});        
+            }
         }
-    
-        //get herb data || send message that no data is available
-        var herbs = herbs || [];
-        herbs = initLocalHerbs(herbs);
         
-        // Todo: restrictions for execution--> build datalist - this should be only done if AJAX powered async data fetching && datalist feature available, otherwise use autosuggest or server side datalist rendering
-        suggestHerbals(herbs);
+    };
         
-        
-        $().ready(function() {
+        var krautliApp = $.sammy(function() {
+            
+            var herbs = [["Url http://www.kaesekessel.de/kraeuter/", "geschützt", "Name", "Jan", "Feb", "März", "Apr", "Mai", "Jun", "Jul", "Aug", "Sept", "Okt", "Nov", "Dez", "Gefahr", "Anwendung", "Gebiete"],
+["a/ackergauchheil.htm", "", "Ackergauchheil", "", "", "", "", "", "Kraut", "Kraut", "Kraut", "Kraut", "Kraut", "", "", "X", "", "Lehmboden, Acker- und Gartenland"],
+["a/ackerschachtelhalm.htm", "", "Ackerschachtelhalm", "", "", "", "", "Triebe", "Triebe", "", "", "", "", "", "", "", "", ""]
+];
 
-            // only use this approach if datalist with included autosuggest is not available
-            // Todo: modernizer etc - check
-            $("#herbalName").autocomplete(suggestedHerbs, {
-                matchContains: true,
-                width:300,
-                scrollHeight: false,
-                minChars: 0,
-                max: false,
-                autoFill: false,
-                formatItem: function(row, i, max) {
-                    return row.name + " °" + row.refId;
-                }, 
-                formatMatch: function(row, i, max) {
-                    return row.name;
-                },
-                formatResult: function(row) {
-                    return row.name;
+            // Do this when no route defined:
+            this.get('', function(context) {
+                // No route defined, set location to '#/' to trigger app automatically:
+                document.location.hash = '/';
+            });
+            
+            // Catch-all for 404 errors:
+                this.get(/.*/, function() { 
+                console.log('404... come on, really?');
+            });
+            
+             /*
+            Display relevant Status Messages of the App while Running
+            */
+            function handleMessages(type, msgContainer){
+                var msg_container = $("#messages"),
+                    msgObject = [];
+                    
+                if(type == "statusMsg" || type == "errorMsg"){
+                    msg_container.append("<li>"+ msgContainer.msg +"</li>");
                 }
+                
+                if(msgContainer && msgContainer.log){
+                    console.log(type+" : "+msgContainer.log);
+                }
+                                
+    		}
+            
+            this.use(MyHerbStuff);    
+
+            
+            
+            // Todo: restrictions for execution--> build datalist - this should be only done if AJAX powered async data fetching && datalist feature available, otherwise use autosuggest or server side datalist rendering
+            //suggestHerbals(herbs);
+
+            this.bind('statusMsg', function(e, data){
+                handleMessages(e.type, data);
+            });
+            this.bind('errorMsg', function(e, data){
+                handleMessages(e.type, data);    
+            });
+            
+
+            
+            // listen to all events
+            this.bindToAllEvents(function(e, data) {
+                //handleMessages(e.type, data);
             });
             
             
-            
-            
-            
-            
-            if(Modernizr.websqldatabase && Modernizr.geolocation){
-                db = db?db:initDB();
-                jQuery(window).ready(function(){
-                    jQuery("#btnInit").click(initiate_geolocation);
-                    //jQuery("#btnGetData").click(getAllPlants);
-                });
-            }else{
-                console.error("No WebSQL Support");
-            }
+            this.trigger('statusMsg', {type:"initApp", msg:"Bla!", log:"Bla: handleMessages() "});
+    
         });
+        
+    
+        $(function() {
+           var  db,
+                herbs = herbs || [];
+            
+           krautliApp.run(); 
+           krautliApp.trigger('statusMsg', {type:"initApp", msg:"Los gehts Messages!", log:"INIT: handleMessages() "});
+           herbs = krautliApp.initLocalHerbs(herbs);
+           krautliApp.suggestHerbals(herbs)
+        });
+
+
+
+
+
+
+
+
+
+
+        
+        
+    
+    
+
     </script>
     
     <section id="progress" class="doc region">
@@ -238,7 +272,7 @@ PersistantObject.prototype.save   = function() {...};
             </p>
             <p class="caption">
                 Eventhandling like Sammy.js implements it <a href="http://sammyjs.org/docs/events">http://sammyjs.org/docs/events</a><br>
-				Not implemented but I defenitely try it out
+				Try this <a href="experiments/Sammy/sammy_helloWorld.html" target="_blank">first Demo with Sammy</a>
             </p>
             <code>
 			</code>
@@ -671,5 +705,8 @@ function initLocalHerbs(ha){
 	</footer>
 
     </div>
+    
+
+    
   </body>
 </html>
