@@ -22,9 +22,10 @@ The Techstack behind:
 
  Getting started with your development on `Krautli`
  ==================================================
- 1. Get git running
- 2. In order to get the initial prototype setup you need yeoman to install the dependencies
- ...
+ # Get git running
+ ## SSH Config https://help.github.com/articles/generating-ssh-keys#macosx
+ # Get Yeoman / Bower / Grunt --> http://www.sitepoint.com/kickstart-your-angularjs-development-with-yeoman-grunt-and-bower/
+ # Checkout the code from: [repo]
  
 
-https://help.github.com/articles/generating-ssh-keys#macosx
+
