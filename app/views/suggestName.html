@@ -1,0 +1,21 @@
+<section>
+  <h1>Serch for a plant name</h1>
+  <p>If the plant you searched for is not in the list you can add it as a new plant.</p>
+
+  <label>
+  	<input data-ng-model="searchterm" type="text" value="" placeholder="e.g. Arnika" />
+  </label>
+
+	<ul>
+	  <li ng-repeat="plant in plantNames | orderBy:'plant.name' | filter:searchterm">
+	    {{plant.name}}
+	  </li>
+	</ul>
+</section>
+
+<!-- In case the searchterm does not appear in the List-->
+<section id="suggestName_AddAsNewPlant" class="hide">
+	<h2>There are no plants with that name<h2>
+	<button class="btn btn-large btn-primary">Add as new plant</button>
+	<p>New plants will be added to your plantlist.</p>
+</section>

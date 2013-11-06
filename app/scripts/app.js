@@ -10,6 +10,10 @@ angular.module('krautli_yoApp', [
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       })
+      .when('/suggestName', {
+        templateUrl: 'views/suggestName.html',
+        controller: 'SuggestNameController'
+      })
       .otherwise({
         redirectTo: '/'
       });
