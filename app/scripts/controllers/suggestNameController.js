@@ -10,4 +10,8 @@ angular.module('krautli_yoApp')
       { name: 'Beifuss' },
       { name: 'Eberesche' }
     ];
+
+    $scope.addNewPlantName = function () {
+    	$scope.plantNames.push({name: $scope.searchterm});
+    }
   });
