@@ -13,7 +13,7 @@
 	</ul>
 
 	<!-- In case the searchterm does not appear in the List-->
-	<section id="suggestName_AddAsNewPlant" class="hide">
+	<section id="suggestName_AddAsNewPlant" ng-show="showAddNewPlantButton()">
 		<h2>There are no plants with that name</h2>
 		<button data-ng-click="addNewPlantName()" class="btn btn-large btn-primary">Add as new plant</button>
 		<p>New plants will be added to your plantlist.</p>
