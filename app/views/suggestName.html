@@ -2,13 +2,17 @@
   <h1>Serch for a plant name</h1>
   <p>If the plant you searched for is not in the list you can add it as a new plant.</p>
 
-  <label>
-  	<input data-ng-model="searchterm" type="text" value="" placeholder="e.g. Arnika" />
-  </label>
-
-	<ul>
+	<div class="navbar">
+		<form class="navbar-inner" action="">
+			<label class="navbar-search pull-left">
+				<input type="text" class="search-query" data-ng-model="searchterm" type="text" value="" placeholder="e.g. Arnika" >
+	  	</label>
+	  </form>
+	</div>
+	  
+  <ul class="nav nav-tabs nav-stacked">
 	  <li ng-repeat="plant in plantNames | orderBy:'plant.name' | filter:searchterm">
-	    {{plant.name}}
+	    <a href="">{{plant.name}}</a>
 	  </li>
 	</ul>
 
