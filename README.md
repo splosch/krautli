@@ -5,25 +5,27 @@ It started offline as a collection of notes and photos taken with a smartphone -
 
 Since thats pretty tideous - the idea of `Krautli` was born.
 
+
 ## Technical Note ##
 
 The app will be a SPA(Single-Page-Application) that is running in a browser or a native wrapper for Android or iOS devices. Anyhow it should always work with a recent browser on every device.
 
-The Techstack behind:
+### The Techstack behind: ###
 - Angular JS for the frontend framework
 - git as versioning / repository
 - twitter bootstrap as UI Library providing interaction and visual patterns
 - yeoman / grunt / bower
--- provide the development frameing
--- prototyoing setup
--- unit / integration testing 
+ - provide the development frameing
+ - prototyoing setup
+ - unit / integration testing 
 
 
-1. Getting started with your development on `Krautli` ##
-2. Get git running
-3. SSH Config https://help.github.com/articles/generating-ssh-keys#macosx
-4. Get Yeoman / Bower / Grunt --> http://www.sitepoint.com/kickstart-your-angularjs-development-with-yeoman-grunt-and-bower/
-5. Checkout the code from: [repo]
+## Getting started with your development on `Krautli` ##
+
+1. Get git running
+2. SSH Config https://help.github.com/articles/generating-ssh-keys#macosx
+3. Get Yeoman / Bower / Grunt --> http://www.sitepoint.com/kickstart-your-angularjs-development-with-yeoman-grunt-and-bower/
+4. Checkout the code from: [repo]
  
 
 
