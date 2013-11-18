@@ -39,10 +39,4 @@ angular.module('krautli_yoApp')
     	plantListFactory.addPlant( newPlant );
     };
 
-    $scope.showAddNewPlantButton = function () {
-    	var hasResults = false;
-
-    	return !hasResults;
-    };
-
   });
