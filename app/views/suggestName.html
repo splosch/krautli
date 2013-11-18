@@ -5,9 +5,13 @@
 	<div class="navbar">
 		<form class="navbar-inner" action="">
 			<label class="navbar-search pull-left">
+
+				<!-- Typing in the searchfield filters the list of plants available -->
 				<input type="text" class="search-query" data-ng-model="searchterm" type="text" value="" placeholder="e.g. Arnika" >
 	  	</label>
 
+	  	<!-- Show all or just the own plants
+	  			 TODO[low]: add functionality -->
 			<div class="btn-group pull-right">
 			  <button class="btn btn-success">All</button>
 			  <button class="btn">Own</button>
@@ -16,9 +20,13 @@
 	</div>
 	  
   <ul class="nav nav-tabs nav-stacked">
+
+  	<!-- Show all plants in plantNames collection filtered and ordered -->
 	  <li ng-repeat="plant in filteredPlants = ( plantNames | orderBy:'plant.name' | filter:searchterm )">
 	    <a href="#/details/{{plant.id}}/{{plant.name}}">
 	    	{{plant.name}}
+
+	    	<!-- If locations are found for that plant - show the count -->
 	    	<span ng-show="plant.locations.length > 0" 
 	    				class="badge badge-success pull-right" 
 	    				title="{{plant.locations.length}} locations saved">
@@ -28,7 +36,8 @@
 	  </li>
 	</ul>
 
-	<!-- In case the searchterm does not appear in the List
+	<!-- Add new plantname to plantNames list
+			 This region is only shown - in case the searchterm does not appear in the List
 			 http://docs.angularjs.org/api/ng.filter:filter#comment-1107533089 -->
 	<section id="suggestName_AddAsNewPlant" ng-show="filteredPlants.length == 0">
 		<h2>There are no plants with that name</h2>
