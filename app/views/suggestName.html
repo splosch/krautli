@@ -7,12 +7,24 @@
 			<label class="navbar-search pull-left">
 				<input type="text" class="search-query" data-ng-model="searchterm" type="text" value="" placeholder="e.g. Arnika" >
 	  	</label>
+
+			<div class="btn-group pull-right">
+			  <button class="btn btn-success">All</button>
+			  <button class="btn">Own</button>
+			</div>
 	  </form>
 	</div>
 	  
   <ul class="nav nav-tabs nav-stacked">
 	  <li ng-repeat="plant in filteredPlants = ( plantNames | orderBy:'plant.name' | filter:searchterm )">
-	    <a href="#/details/{{plant.id}}/{{plant.name}}">{{plant.name}}</a>
+	    <a href="#/details/{{plant.id}}/{{plant.name}}">
+	    	{{plant.name}}
+	    	<span ng-show="plant.locations.length > 0" 
+	    				class="badge badge-success pull-right" 
+	    				title="{{plant.locations.length}} locations saved">
+	    		{{plant.locations.length}}
+	    	</span>
+	    </a>
 	  </li>
 	</ul>
 
