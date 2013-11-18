@@ -4,10 +4,10 @@ angular.module('krautli_yoApp')
   .factory('plantListFactory', function () {
   	var factory = {},
   		initialPlantList = [
-	      { name: 'Ackergauchheil' },
-	      { name: 'Arnika' },
-	      { name: 'Beifuss' },
-	      { name: 'Eberesche' }
+	      { id: 1, name: 'Ackergauchheil' },
+	      { id: 2, name: 'Arnika' },
+	      { id: 3, name: 'Beifuss' },
+	      { id: 4, name: 'Eberesche' }
 	    ];
 
 	factory.getPlantList = function () {
@@ -18,6 +18,10 @@ angular.module('krautli_yoApp')
 		initialPlantList.push( plant );
 		return initialPlantList;
 	};  
+
+  factory.newPlantId = function () {
+    return initialPlantList.length + 1;
+  };  
 
   	return factory;
   })
@@ -34,6 +38,7 @@ angular.module('krautli_yoApp')
     	}
 
     	newPlant.name = $scope.searchterm;
+      newPlant.id   = plantListFactory.newPlantId();
 
     	plantListFactory.addPlant( newPlant );
     };
