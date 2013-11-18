@@ -20,12 +20,13 @@ The Techstack behind:
 -- prototyoing setup
 -- unit / integration testing 
 
- Getting started with your development on `Krautli`
- ==================================================
- # Get git running
- ## SSH Config https://help.github.com/articles/generating-ssh-keys#macosx
- # Get Yeoman / Bower / Grunt --> http://www.sitepoint.com/kickstart-your-angularjs-development-with-yeoman-grunt-and-bower/
- # Checkout the code from: [repo]
+
+Getting started with your development on `Krautli`
+==================================================
+# Get git running
+## SSH Config https://help.github.com/articles/generating-ssh-keys#macosx
+# Get Yeoman / Bower / Grunt --> http://www.sitepoint.com/kickstart-your-angularjs-development-with-yeoman-grunt-and-bower/
+# Checkout the code from: [repo]
  
 
 
