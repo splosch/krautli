@@ -29,7 +29,6 @@ angular.module('krautli_yoApp')
     $scope.addNewPlantName = function () {
     	var newPlant = {};
 
-    	debugger;
     	if ( !$scope.searchterm  || typeof $scope.searchterm !== "string" || $scope.searchterm.length < 4 ) {
     		return false;
     	}
