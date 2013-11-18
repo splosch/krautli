@@ -6,7 +6,7 @@ angular.module('krautli_yoApp')
 
       return factory;
   })
-  .controller('PlantDetailsController', function ($scope, plantDetailsFactory) {
-
-
+  .controller('PlantDetailsController', function ($scope, $route, $routeParams, plantDetailsFactory) {
+  	var plantId = $routeParams.plantID || null;
+  	$scope.plant = { name : "Testplant", id : plantId }
   });

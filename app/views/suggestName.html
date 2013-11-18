@@ -16,7 +16,8 @@
 	  </li>
 	</ul>
 
-	<!-- In case the searchterm does not appear in the List-->
+	<!-- In case the searchterm does not appear in the List
+			 http://docs.angularjs.org/api/ng.filter:filter#comment-1107533089 -->
 	<section id="suggestName_AddAsNewPlant" ng-show="filteredPlants.length == 0">
 		<h2>There are no plants with that name</h2>
 		<button data-ng-click="addNewPlantName()" class="btn btn-large btn-primary">Add "{{searchterm}}" as new plant</button>
