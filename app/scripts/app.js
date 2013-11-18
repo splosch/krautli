@@ -14,6 +14,10 @@ angular.module('krautli_yoApp', [
         templateUrl: 'views/suggestName.html',
         controller: 'SuggestNameController'
       })
+      .when('/details/:plantID', {
+        templateUrl: 'views/plantDetails.html',
+        controller: 'PlantDetailsController'
+      })
       .otherwise({
         redirectTo: '/'
       });
