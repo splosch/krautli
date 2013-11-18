@@ -11,15 +11,15 @@
 	</div>
 	  
   <ul class="nav nav-tabs nav-stacked">
-	  <li ng-repeat="plant in plantNames | orderBy:'plant.name' | filter:searchterm">
+	  <li ng-repeat="plant in filteredPlants = ( plantNames | orderBy:'plant.name' | filter:searchterm )">
 	    <a href="">{{plant.name}}</a>
 	  </li>
 	</ul>
 
 	<!-- In case the searchterm does not appear in the List-->
-	<section id="suggestName_AddAsNewPlant" ng-show="showAddNewPlantButton()">
+	<section id="suggestName_AddAsNewPlant" ng-show="filteredPlants.length == 0">
 		<h2>There are no plants with that name</h2>
-		<button data-ng-click="addNewPlantName()" class="btn btn-large btn-primary">Add as new plant</button>
+		<button data-ng-click="addNewPlantName()" class="btn btn-large btn-primary">Add "{{searchterm}}" as new plant</button>
 		<p>New plants will be added to your plantlist.</p>
 	</section>
 
