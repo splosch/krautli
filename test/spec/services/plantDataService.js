@@ -3,7 +3,7 @@
 describe('Service: Plantdataservice', function () {
 
   // load the service's module
-  beforeEach(module('KrautliYoApp'));
+  beforeEach(module('krautli_yoApp'));
 
   // instantiate service
   var Plantdataservice;
