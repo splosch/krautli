@@ -18,6 +18,8 @@ The app will be a SPA(Single-Page-Application) that is running in a browser or a
  - provide the development frameing
  - prototyoing setup
  - unit / integration testing 
+- other dependencies
+ - angularLocalStorage installed via bower https://github.com/agrublev/angularLocalStorage
 
 
 ## Getting started with your development on `Krautli` ##

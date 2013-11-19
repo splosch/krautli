@@ -1,6 +1,7 @@
 'use strict';
 
 angular.module('krautli_yoApp', [
+  'ngRoute',
   'ngResource',
   'ui.bootstrap'
 ])
