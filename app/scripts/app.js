@@ -3,6 +3,7 @@
 angular.module('krautli_yoApp', [
   'ngRoute',
   'ngResource',
+  'angularLocalStorage',
   'ui.bootstrap'
 ])
   .config(function ($routeProvider) {
