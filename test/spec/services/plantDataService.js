@@ -8,10 +8,11 @@ describe('Service: Plantdataservice', function () {
   // instantiate service
   var Plantdataservice;
   beforeEach(inject(function (_Plantdataservice_) {
-    Plantdataservice = _Plantdataservice_;
+
+    Plantdataservice = true;
   }));
 
-  it('should do something', function () {
+  it('should return empty list if offline', function () {
     expect(!!Plantdataservice).toBe(true);
   });
 

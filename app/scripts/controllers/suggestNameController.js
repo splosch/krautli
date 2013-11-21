@@ -5,13 +5,14 @@ angular.module('krautli_yoApp')
   	var factory = {},
   		initialPlantList = [
 	      { id: 1, name: 'Ackergauchheil' },
-	      { id: 2, name: 'Arnika' },
 	      { id: 3, name: 'Beifuss' },
+        { id: 2, name: 'Arnika', own: true },
 	      { id: 4, name: 'Eberesche', 
           locations: [ 
             { lat: '-20.223', long: '45.099' },
             { lat: '-13.200', long: '15.013' }
-          ]}
+          ]},
+        { id: 8, name: 'Dreibla' }
 	    ];
 
 	factory.getPlantList = function () {
@@ -43,6 +44,7 @@ angular.module('krautli_yoApp')
 
     	newPlant.name = $scope.searchterm;
       newPlant.id   = plantListFactory.newPlantId();
+      newPlant.own  = true;
 
     	plantListFactory.addPlant( newPlant );
     };

@@ -12,9 +12,9 @@
 
       <!-- Show all or just the own plants
            TODO[low]: add functionality -->
-      <div class="btn-group pull-right">
-        <button class="btn btn-success">All</button>
-        <button class="btn">Own</button>
+      <div ng-init="predicate = ''" class="btn-group pull-right">
+        <button class="btn btn-success" ng-click="predicate = ''">All</button>
+        <button class="btn" ng-click="predicate = { own : true }">Own</button>
       </div>
     </form>
   </div>
@@ -22,7 +22,7 @@
   <ul class="nav nav-tabs nav-stacked">
 
     <!-- Show all plants in plantNames collection filtered and ordered -->
-    <li ng-repeat="plant in filteredPlants = ( plantNames | orderBy:'plant.name' | filter:searchterm )">
+    <li ng-repeat="plant in filteredPlants = ( plantNames | filter:searchterm | filter:predicate | orderBy:'name' ) ">
       <a href="#/details/{{plant.id}}/{{plant.name}}">
         {{plant.name}}
 
@@ -39,12 +39,12 @@
   <!-- Add new plantname to plantNames list
        This region is only shown - in case the searchterm does not appear in the List
        based on: http://docs.angularjs.org/api/ng.filter:filter#comment-1107533089 -->
-  <section id="suggestName_AddAsNewPlant" ng-show="filteredPlants.length == 0">
-    <h2>There are no plants with that name</h2>
+  <section id="suggestName_AddAsNewPlant" ng-show="filteredPlants.length === 0">
+    <!--h2>There are no plants with that name</h2-->
     <button data-ng-click="addNewPlantName()" class="btn btn-large btn-primary">
       Add "{{searchterm}}" as new plant
     </button>
-    <p>New plants will be added to your plantlist.</p>
+    <!--p>New plants will be added to your plantlist.</p>
   </section>
 
 </section>
