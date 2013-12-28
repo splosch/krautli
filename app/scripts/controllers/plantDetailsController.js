@@ -2,12 +2,35 @@
 
 angular.module('krautli_yoApp')
   .factory('plantDetailsFactory', function () {
-      var factory = {};
+      var factory = {},
+          // plants shall be fetched via network and persisted as objects locally
+          plants = { 
+            1 : { name: 'Ackergauchheil' },
+            2 : { name: 'Arnika', 
+                  own: true },
+            3 : { name: 'Beifuss' },
+            4 : { name: 'Eberesche', 
+                own: true,
+                locations: [ 
+                { lat: '-20.223', long: '45.099' },
+                { lat: '-13.200', long: '15.013' }
+              ]},
+            8 : { name: 'Dreibla' }
+          };  
+
+      factory.getPlantDetails = function (id) {
+        return plants[id] || null;
+      };
 
       return factory;
   })
   .controller('PlantDetailsController', function ($scope, $route, $routeParams, plantDetailsFactory) {
-  	var plantId = $routeParams.plantID || "#",
-  		plantName = $routeParams.plantName || "unknown";
-  	$scope.plant = { name : plantName, id : plantId }
+
+    // At the mpment we take all the needed Info from URL PArams which is uncool
+    var plantId = $routeParams.plantID || "#",
+        plant = plantDetailsFactory.getPlantDetails(plantId);
+
+    $scope.plant.name = plant.name || "";
+    $scope.plant.id   = plant.plantId || "#";
+    $scope.plant.isOwnPlant = plant.own || false;
   });
