@@ -9,7 +9,6 @@ describe('Service: Networkstatusservice', function () {
   var Networkstatusservice,
       rScope;
 
-
   // Initialize the service and a mock scope
   beforeEach(inject(function ($service, $rootScope) {
     rScope = $rootScope.$new();
