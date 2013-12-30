@@ -26,7 +26,7 @@ The app will be a SPA(Single-Page-Application) that is running in a browser or a
 
 1. Get git running
 2. SSH Config https://help.github.com/articles/generating-ssh-keys#macosx
-3. Get Yeoman / Bower / Grunt --> http://www.sitepoint.com/kickstart-your-angularjs-development-with-yeoman-grunt-and-bower/
+3. Get Yeoman / Bower / Grunt --> http://www.sitepoint.com/kickstart-your-angularjs-development-with-yeoman-grunt-and-bower/ and http://blog.safaribooksonline.com/2013/07/02/web-applications-with-yeoman/
 4. Checkout the code from: [repo]
  
 
