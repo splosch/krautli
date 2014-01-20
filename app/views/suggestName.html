@@ -1,7 +1,4 @@
 <section>
-  <h1>Search for a plant name</h1>
-  <p>If the plant you searched for is not in the list you can add it as a new plant.</p>
-
   <div class="navbar">
     <form class="navbar-inner" action="">
       <label class="navbar-search pull-left">
@@ -39,12 +36,11 @@
   <!-- Add new plantname to plantNames list
        This region is only shown - in case the searchterm does not appear in the List
        based on: http://docs.angularjs.org/api/ng.filter:filter#comment-1107533089 -->
-  <section id="suggestName_AddAsNewPlant" ng-show="filteredPlants.length === 0">
-    <!--h2>There are no plants with that name</h2-->
+  <section id="suggestName_AddAsNewPlant" ng-show="filteredPlants.length <= 3">
+     <p>If the plant you searched for is not in the list you can add it as a new plant.</p>
     <button data-ng-click="addNewPlantName()" class="btn btn-large btn-primary">
       Add "{{searchterm}}" as new plant
     </button>
-    <!--p>New plants will be added to your plantlist.</p>
   </section>
 
 </section>
