@@ -1,35 +1,34 @@
 'use strict';
 
-describe('Service: Networkstatusservice', function () {
+describe('Service: networkStatusService', function () {
 
   // load the service's module
   beforeEach(module('krautli_yoApp'));
 
   // instantiate service
-  var Networkstatusservice,
-      rScope;
+  var networkStatusService,
+      scope;
 
-  // Initialize the service and a mock scope
-  beforeEach(inject(function ($service, $rootScope) {
-    rScope = $rootScope.$new();
-    Networkstatusservice = $service('Networkstatusservice', {
-      $rootScope: rScope
-    });
+  beforeEach(inject(function (_networkStatusService_, $rootScope) {
+    scope = $rootScope.$new();
+
+    networkStatusService = _networkStatusService_.$new( scope );
   }));
 
 
   it('initially isOnline should be false', function () {
-    expect(Networkstatusservice.isOnline()).toBe(false);
+    expect(networkStatusService.isOnline()).toBe(false);
   });
 
   it('isOnline should be true if global flag is set online', function () {
-    $rootScope.isOnline = true;
-    expect(Networkstatusservice.isOnline()).toBe(true);
+    scope.isOnline = true;
+    expect(networkStatusService.isOnline()).toBe(true);
   });
 
   it('isOnline should be false if global flag is set to offline', function () {
-    $rootScope.isOnline = false;
-    expect(Networkstatusservice.isOnline()).toBe(false);
+    scope.isOnline = false;
+    expect(networkStatusService.isOnline()).toBe(false);
   });
+
 
 });
