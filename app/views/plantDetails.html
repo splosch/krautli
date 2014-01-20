@@ -1,5 +1,33 @@
 <section>
   <h1>Plantdetails</h1>
+
+  <!-- Plant image thumbs -->
+  <ul class="thumbnails">
+	  <li class="span4">
+	    <a href="#" class="thumbnail">
+	      <img src="img/plantpictures/plantpic1.png" alt="">
+	    </a>
+	  </li>
+	  <li class="span4">
+	    <a href="#" class="thumbnail">
+	      <img src="img/plantpictures/plantpic2.png" alt="">
+	    </a>
+	  </li>
+	  <li class="span4">
+	    <a href="#" class="thumbnail empty">
+	    	<i class="icon-plus-sign"></i><br>
+	    	<span class="">Bild hinzufügen</span>
+	    </a>
+	  </li>
+	</ul>
+
+	<!-- Adjust the radius-->
+	<div ng-init="radius=10" class="btn-group">
+	  <button class="btn" ng-click="radius=radius-10">-</button>
+	  <button class="btn" data-radius="{{radius}}">{{radius}}m</button>
+	  <button class="btn" ng-click="radius=radius+10">+</button>
+	</div>
+
   <dl>
   	<dt>Name:</dt>
   	<dd>{{plant.name}}</dd>
