@@ -30,6 +30,7 @@ angular.module('krautli_yoApp')
     var plantId = $routeParams.plantID || "#",
         plant = plantDetailsFactory.getPlantDetails(plantId);
 
+    $scope.plant = {};    
     $scope.plant.name = plant.name || "";
     $scope.plant.id   = plant.plantId || "#";
     $scope.plant.isOwnPlant = plant.own || false;
