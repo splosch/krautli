@@ -1,47 +1,50 @@
 <section>
-  <h1>Plantdetails</h1>
+  <h1>{{plant.name}} #{{plant.id}}</h1>
 
   <!-- Plant image thumbs -->
-  <ul class="thumbnails">
-	  <li>
-	    <a href="#" class="thumbnail">
-	      <img src="img/plantpictures/plantpic1.png" alt="">
-	    </a>
-	  </li>
-	  <li>
-	    <a href="#" class="thumbnail">
-	      <img src="img/plantpictures/plantpic2.png" alt="">
-	    </a>
-	  </li>
-	  <li>
-	    <a href="#" class="thumbnail">
-	      <img src="img/plantpictures/plantpic1.png" alt="">
-	    </a>
-	  </li>
-	  <li>
-	    <a href="#" class="thumbnail">
-	      <img src="img/plantpictures/plantpic2.png" alt="">
-	    </a>
-	  </li>
+  <section>
+		<h2>Sample images:</h2>
+	  <ul class="thumbnails">
+		  <li>
+		    <a href="#" class="thumbnail">
+		      <img src="img/plantpictures/plantpic1.png" alt="">
+		    </a>
+		  </li>
+		  <li>
+		    <a href="#" class="thumbnail">
+		      <img src="img/plantpictures/plantpic2.png" alt="">
+		    </a>
+		  </li>
+		  <li>
+		    <a href="#" class="thumbnail">
+		      <img src="img/plantpictures/plantpic1.png" alt="">
+		    </a>
+		  </li>
+		  <li>
+		    <a href="#" class="thumbnail">
+		      <img src="img/plantpictures/plantpic2.png" alt="">
+		    </a>
+		  </li>
 
-	  <li>
-	    <a class="thumbnail empty">
-	    	
-	    </a>
-	  </li>
-	</ul>
+		  <li>
+		    <a class="thumbnail empty">
+		    	
+		    </a>
+		  </li>
+		</ul>
+	</section>
 
 	<!-- Adjust the radius-->
-	<div ng-init="radius=10" class="btn-group">
-	  <button class="btn" ng-click="radius=radius-10">-</button>
-	  <button class="btn" data-radius="{{radius}}">{{radius}}m</button>
-	  <button class="btn" ng-click="radius=radius+10">+</button>
-	</div>
+	<section>
 
-  <dl>
-  	<dt>Name:</dt>
-  	<dd>{{plant.name}}</dd>
-  	<dt>ID:</dt>
-  	<dd>{{plant.id}}</dd>
-  </dl>
+    	<label for="plant_range">Growing area (range):</label>
+			<p><div id="plant_range" ng-init="radius=10" class="btn-group">
+			  <button class="btn" ng-click="radius=radius-10">-</button>
+			  <button class="btn" data-radius="{{radius}}">{{radius}}m</button>
+			  <button class="btn" ng-click="radius=radius+10">+</button>
+			</div></p>
+	
+			<button class="btn-primary btn-large">Save Plant Position</button>
+		</form>
+	</section>
 </section>
