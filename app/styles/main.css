@@ -20,3 +20,32 @@ body {
     line-height: 1;
     letter-spacing: -1px;
 }
+
+ul.thumbnails {
+    width: 100%;
+    overflow-x: scroll;
+    text-align: left;
+    white-space: nowrap;
+    margin: auto;
+    background-color: #ccc;
+    padding: inherit;
+}
+
+ul.thumbnails > li {
+    float: none;
+    display: inline-block;
+    width: 200px;
+    height: 200px;
+}
+
+ul.thumbnails > li:last-child {
+    margin-right: 30px;
+}
+
+.thumbnails .thumbnail {
+    height: 100%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    margin: 10px;
+    width: 100%;
+}
