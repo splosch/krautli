@@ -19,7 +19,13 @@ angular.module('krautli_yoApp')
           };  
 
       factory.getPlantDetails = function (id) {
-        return plants[id] || null;
+        var plant =  plants[id] || null;
+
+        if (plant) {
+          plant.id = id;
+        }
+
+        return plant;
       };
 
       return factory;
@@ -32,6 +38,7 @@ angular.module('krautli_yoApp')
 
     $scope.plant = {};    
     $scope.plant.name = plant.name || "";
-    $scope.plant.id   = plant.plantId || "#";
+    $scope.plant.id   = plant.id || "#";
     $scope.plant.isOwnPlant = plant.own || false;
+    
   });

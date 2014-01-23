@@ -16,7 +16,7 @@ angular.module('krautli_yoApp', [
         templateUrl: 'views/suggestName.html',
         controller: 'SuggestNameController'
       })
-      .when('/details/:plantID/:plantName', {
+      .when('/details/:plantID', {
         templateUrl: 'views/plantDetails.html',
         controller: 'PlantDetailsController'
       })

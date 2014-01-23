@@ -20,7 +20,7 @@
 
     <!-- Show all plants in plantNames collection filtered and ordered -->
     <li ng-repeat="plant in filteredPlants = ( plantNames | filter:searchterm | filter:plantTypeFilter | orderBy:'name' ) ">
-      <a href="#/details/{{plant.id}}/{{plant.name}}">
+      <a href="#/details/{{plant.id}}">
         {{plant.name}}
 
         <!-- If locations are found for that plant - show the count -->
