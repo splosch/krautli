@@ -36,15 +36,20 @@
 
 	<!-- Adjust the radius-->
 	<section>
-
     	<label for="plant_range">Growing area (range):</label>
-			<p><div id="plant_range" ng-init="radius=10" class="btn-group">
-			  <button class="btn" ng-click="radius=radius-10">-</button>
-			  <button class="btn" data-radius="{{radius}}">{{radius}}m</button>
-			  <button class="btn" ng-click="radius=radius+10">+</button>
-			</div></p>
-	
-			<button ng-click="savePlantPosition(plant.id)" class="btn-primary btn-large">Save Plant Position (Nr. {{plant.locations.length +1}})</button>
-		</form>
+		<p><div id="plant_range" ng-init="radius=10" class="btn-group">
+		  <button class="btn" ng-click="radius=radius-10">-</button>
+		  <button class="btn" data-radius="{{radius}}">{{radius}}m</button>
+		  <button class="btn" ng-click="radius=radius+10">+</button>
+		</div></p>
+
+		<button ng-click="savePlantPosition(plant.id)" class="btn-primary btn-large">Save Plant Position (Nr. {{plant.locations.length +1}})</button>
+
+		<ul class="nav nav-tabs nav-stacked">
+		    <li ng-repeat="pos in plant.locations ">
+		   		Lon: {{pos.long}}, Lat: {{pos.lat}}, Range: {{pos.range}}
+		    </li>
+		</ul>
+
 	</section>
 </section>

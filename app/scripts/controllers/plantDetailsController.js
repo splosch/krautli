@@ -56,9 +56,9 @@ angular.module('krautli_yoApp')
       var position = { lat: '-14.22736', long: '45.22341' },
           newPosition = position || {};
 
-      newPosition.range = $scope.range || 10;
+      newPosition.range = $scope.radius;
 
-      $scope.plant.locations = plantDetailsFactory.addPlantPositon( plantId, position );
+      $scope.plant.locations = plantDetailsFactory.addPlantPositon( plantId, newPosition );
     };
     
   });
