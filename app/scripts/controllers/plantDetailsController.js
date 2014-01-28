@@ -19,14 +19,24 @@ angular.module('krautli_yoApp')
           };  
 
       factory.getPlantDetails = function (id) {
-        var plant =  plants[id] || null;
+        var plant = plants[id] || null;
 
-        if (plant) {
-          plant.id = id;
-        }
+        plant.id = plant ? id : null ;
 
         return plant;
       };
+
+      factory.addPlantPositon = function ( id, pos ) {
+        var locations = [];
+
+        if (id && plants[id] && pos && pos.lat && pos.long) {
+          locations = plants[id].locations || [];
+          locations.push( pos );
+          plants[id].locations = locations;
+        }
+
+        return locations;
+      };  
 
       return factory;
   })
@@ -40,5 +50,15 @@ angular.module('krautli_yoApp')
     $scope.plant.name = plant.name || "";
     $scope.plant.id   = plant.id || "#";
     $scope.plant.isOwnPlant = plant.own || false;
+    $scope.plant.locations = plant.locations || [];
+
+    $scope.savePlantPosition = function ( plantId ) {
+      var position = { lat: '-14.22736', long: '45.22341' },
+          newPosition = position || {};
+
+      newPosition.range = $scope.range || 10;
+
+      $scope.plant.locations = plantDetailsFactory.addPlantPositon( plantId, position );
+    };
     
   });
