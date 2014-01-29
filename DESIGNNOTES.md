@@ -16,6 +16,6 @@ Design keys
 -- natural tones (green brown orange, all desaturized)
 
 Todos:
-1. Pick the color scheme
+1. Pick the color scheme [anthrazit, spacegray, lightgrey, mossygreen, sanddornorange, vogelbeerred]
 2. Name two reference designs the guide
 3. Select Typografie & add examples
