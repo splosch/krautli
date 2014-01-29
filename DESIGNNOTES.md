@@ -15,3 +15,7 @@ Design keys
 - natural
 -- natural tones (green brown orange, all desaturized)
 
+Todos:
+1. Pick the color scheme
+2. Name two reference designs the guide
+3. Select Typografie & add examples
