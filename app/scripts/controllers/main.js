@@ -2,10 +2,5 @@
 
 angular.module('krautli_yoApp')
   .controller('MainCtrl', function ($scope) {
-    $scope.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma',
-      'Animagic'
-    ];
+    // no need for a Startpage Controller as long as plant suggestion is startpage
   });
