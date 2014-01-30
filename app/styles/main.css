@@ -1,3 +1,31 @@
+/* 
+    These Fonts are just for testing purpose inlined
+    TODO: remove them and call the google fonts api 
+    the usage of these fonts apart from via this API is prohibited
+*/
+@font-face {
+  font-family: 'PT Sans';
+  font-style: normal;
+  font-weight: 400;
+  /*http://themes.googleusercontent.com/static/fonts/ptsans/v6/7YGmE4Ls5b94ct65u07hVQLUuEpTyoUstqEm5AMlJo4.woff*/
+  src: local('PT Sans'), local('PTSans-Regular'), url('/fonts/PTSans.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'PT Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('PT Sans Bold'), local('PTSans-Bold'), url('/fonts/PTSans.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'GFS Didot';
+  font-style: normal;
+  font-weight: 400;
+  /*http://themes.googleusercontent.com/static/fonts/gfsdidot/v4/NjVyNjKxJC9ASa9qAjic8wLUuEpTyoUstqEm5AMlJo4.woff*/
+  src: local('GFS Didot Regular'), local('GFSDidot-Regular'), url('/fonts/GFS_Didot.woff') format('woff');
+}
+
 body {
     background: #fafafa;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -49,3 +77,99 @@ ul.thumbnails > li:last-child {
     margin: 10px;
     width: 100%;
 }
+
+
+/* 
+    Example section 
+    "PaperEncycl-Theme" 
+
+    anthrazit       $shadow1: #202020;
+                    $shadow2: #404040;
+    spacegray       $shadow3: #606060;
+    lightgrey       $paperwhite1: #e5ede0; 
+                    $paperwhite2: #c5cdc0; 
+    mossygreen
+    sanddornorange
+    vogelbeerred
+*/
+
+body {
+  display:block;
+  margin: 10px;
+  background-color: #e5ede0;
+  height: 500px;
+  box-sizing: border-box;
+  border-radius: 3px;
+  padding: 20px;
+}
+
+html {
+  background-color: #202020;
+  color: #202020;
+  font-family: 'GFS Didot', serif;
+  font-size: 13px;
+}
+
+section {
+  margin-bottom: 20px;
+}
+
+.title, .subtitle {
+  font-family: 'PT Sans', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 0.5em;
+}
+
+.subtitle {
+/* @extend .title; */
+  font-size: 20px;
+  font-weight:400;
+}
+
+.encycl button,.encycl .btn {
+  display: inline-block;
+  padding: 6px 12px;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.428571429;
+  text-align: center;
+  text-shadow: none;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+
+.encycl .btn {
+  color: #e5ede0;
+  background-color: #404040;
+  border-color: #fff;
+}
+  
+.encycl .btn:hover {
+    background-color: #606060;
+    border-color: #fff;
+}
+
+
+.encycl .btn-primary {
+  color: #e5ede0;
+  background-color: #202020;
+  border-color: #fff;
+}  
+.encycl .btn-primary:hover {
+background-color: #404040;
+border-color: #fff;
+}
+
+.encycl ul > li {
+  
+}
+
+
+

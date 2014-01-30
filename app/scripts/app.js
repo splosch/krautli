@@ -9,9 +9,8 @@ angular.module('krautli_yoApp', [
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
-        redirectTo: '/suggestName'
-        //templateUrl: 'views/main.html',
-        //controller: 'MainCtrl'
+        templateUrl: 'views/main.html',
+        controller: 'MainCtrl'
       })
       .when('/suggestName', {
         templateUrl: 'views/suggestName.html',
