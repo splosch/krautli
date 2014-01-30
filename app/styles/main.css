@@ -85,8 +85,8 @@ ul.thumbnails > li:last-child {
 
     anthrazit       $shadow1: #202020;
                     $shadow2: #404040;
-    spacegray       $shadow3: #606060;
-    lightgrey       $paperwhite1: #e5ede0; 
+    spacegray       $shadow3: #a0a0a0;
+    paperwhite      $paperwhite1: #e5ede0; 
                     $paperwhite2: #c5cdc0; 
     mossygreen
     sanddornorange
@@ -97,7 +97,7 @@ body {
   display:block;
   margin: 10px;
   background-color: #e5ede0;
-  height: 500px;
+  min-height: 500px;
   box-sizing: border-box;
   border-radius: 3px;
   padding: 20px;
@@ -105,9 +105,12 @@ body {
 
 html {
   background-color: #202020;
-  color: #202020;
+}
+
+html .encycl{
   font-family: 'GFS Didot', serif;
-  font-size: 13px;
+  font-size: 14px;
+  color: #202020;
 }
 
 section {
@@ -152,8 +155,8 @@ section {
 }
   
 .encycl .btn:hover {
-    background-color: #606060;
-    border-color: #fff;
+  background-color: #606060;
+  border-color: #fff;
 }
 
 
@@ -163,12 +166,25 @@ section {
   border-color: #fff;
 }  
 .encycl .btn-primary:hover {
-background-color: #404040;
-border-color: #fff;
+  background-color: #404040;
+  border-color: #fff;
 }
 
-.encycl ul > li {
-  
+.encycl .list-group-item a{
+  color: #202020;
+  background-color: #e5ede0;
+  border-color: #a0a0a0;
+  font-family: 'PT Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.encycl .list-group-item a > i{
+  font-family: 'GFS Didot', serif;
+  font-size: 16px;
+  font-style: italic;
+  color: #606060;
+  font-weight: normal;
 }
 
 
