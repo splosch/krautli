@@ -55,8 +55,17 @@ ul.thumbnails {
     text-align: left;
     white-space: nowrap;
     margin: auto;
-    background-color: #ccc;
     padding: inherit;
+}
+
+.encycl .thumbnail {
+  background-color: #fafafa;
+  border-color: #ddd;
+}
+
+.encycl .thumbnail > img {
+  height:188px;
+  width:188px;
 }
 
 ul.thumbnails > li {
@@ -87,7 +96,8 @@ ul.thumbnails > li:last-child {
                     $shadow2: #404040;
     spacegray       $shadow3: #a0a0a0;
     paperwhite      $paperwhite1: #e5ede0; 
-                    $paperwhite2: #c5cdc0; 
+                    $paperdarken: #c5cdc0;
+                    $paperhighlight: #fafafa; 
     mossygreen
     sanddornorange
     vogelbeerred
@@ -170,16 +180,25 @@ section {
   border-color: #fff;
 }
 
-.encycl .list-group-item a{
+.encycl .nav-stacked .list-group-item a{
   color: #202020;
   background-color: #e5ede0;
-  border-color: #a0a0a0;
+  border-color: #c5cdc0;
   font-family: 'PT Sans', sans-serif;
   font-size: 18px;
   font-weight: 700;
 }
 
-.encycl .list-group-item a > i{
+.encycl .nav-stacked .list-group-item a:hover{
+  background-color: #fafafa;
+}
+
+.encycl .nav-stacked > li > a:hover, 
+.encycl .nav-stacked > li > a:focus {
+  border-color: #c5cdc0;
+}
+
+.encycl .lat-name{
   font-family: 'GFS Didot', serif;
   font-size: 16px;
   font-style: italic;
@@ -187,5 +206,12 @@ section {
   font-weight: normal;
 }
 
+.encycl .lat-name:before{
+  content: "[";
+}
+
+.encycl .lat-name:after{
+  content: "]";
+}
 
 
