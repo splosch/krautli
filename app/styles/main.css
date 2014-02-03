@@ -61,6 +61,24 @@ ul.thumbnails {
 .encycl .thumbnail {
   background-color: #fafafa;
   border-color: #ddd;
+  position:relative;
+}
+
+.encycl .thumbnail.empty:before {
+  content: "+"; 
+  font-family: 'PT Sans', sans-serif;
+  font-size: 70px;
+  font-weight: 700;
+  position: absolute;
+  width: 37px;
+  left: 50%;
+  margin-left: -24px;
+  top: 50%;
+  margin-top: -20px;
+  display: block;
+  height: 37px;
+  line-height: 37px;
+  color: #c5cdc0;
 }
 
 .encycl .thumbnail > img {
@@ -105,12 +123,13 @@ ul.thumbnails > li:last-child {
 
 body {
   display:block;
-  margin: 10px;
+  margin: 10px auto;
   background-color: #e5ede0;
   min-height: 500px;
   box-sizing: border-box;
   border-radius: 3px;
   padding: 20px;
+  max-width: 690px;
 }
 
 html {
