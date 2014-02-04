@@ -91,17 +91,31 @@ ul.thumbnails > li {
     display: inline-block;
     width: 200px;
     height: 200px;
+    margin: 0 20px 0 5px;
+    position: relative;
 }
 
+ul.thumbnails > li:not(:last-child):after{
+  content: "*";
+    position: absolute;
+    top: 50%;
+    right: -21px;
+    font-size: 30px;
+    line-height: 1px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 0 1px #a0a0a0    
+}
+
+
 ul.thumbnails > li:last-child {
-    margin-right: 30px;
+    margin-right: 40px;
 }
 
 .thumbnails .thumbnail {
     height: 100%;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
-    margin: 10px;
     width: 100%;
 }
 
@@ -186,6 +200,10 @@ section {
 .encycl .btn:hover {
   background-color: #606060;
   border-color: #fff;
+}
+
+.encycl p.text {
+  text-align: justify;
 }
 
 
