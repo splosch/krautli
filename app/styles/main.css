@@ -130,7 +130,7 @@ ul.thumbnails > li:last-child {
     paperwhite      $paperwhite1: #e5ede0; 
                     $paperdarken: #c5cdc0;
                     $paperhighlight: #fafafa; 
-    mossygreen
+    mossygreen      $mossygreen: #5F9C11; rgba(95, 156, 17, 1)
     sanddornorange
     vogelbeerred
 */
@@ -158,6 +158,31 @@ html .encycl{
 
 section {
   margin-bottom: 20px;
+}
+
+.encycl a {
+  color: #5F9C11;
+  font-family: 'PT Sans', sans-serif;
+  text-decoration: none;
+}
+
+.read-more {
+  display: inline-block;
+  margin-left: 5px;
+
+}
+
+.read-more:before, .read-more:after{
+  content: "*";
+  font-family: 'GFS Didot', serif;
+  font-size: 19px;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 0 1px #a0a0a0;
+  display: inline-block;
+  vertical-align: -webkit-baseline-middle;
+  line-height: 1px;
+  margin: 0 2px;
 }
 
 .title, .subtitle {
