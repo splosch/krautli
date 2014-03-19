@@ -1,22 +1,46 @@
 'use strict';
 
 angular.module('krautli_yoApp')
-  .factory('plantDetailsFactory', function () {
+  .factory('plantsFactory', function () {
       var factory = {},
           // plants shall be fetched via network and persisted as objects locally
           plants = { 
-            1 : { name: 'Ackergauchheil' },
-            2 : { name: 'Arnika', 
+            1 : { id: 1,
+                  name: 'Ackergauchheil',
+                  latname: 'Botansi ackergauli sanctum' },
+            2 : { id: 2,
+                  name: 'Arnika',
+                  latname: 'Fevelus satinum',
                   own: true },
-            3 : { name: 'Beifuss' },
-            4 : { name: 'Eberesche', 
-                own: true,
-                locations: [ 
-                { lat: '-20.223', long: '45.099' },
-                { lat: '-13.200', long: '15.013' }
-              ]},
-            8 : { name: 'Dreibla' }
-          };  
+            3 : { id: 3,
+                  name: 'Beifuss',
+                  latname: 'Vehennis lam. natus' },
+            4 : { id: 4,
+                  name: 'Eberesche', 
+                  own: true,
+                  locations: [ 
+                    { lat: '-20.223', long: '45.099' },
+                    { lat: '-13.200', long: '15.013' }
+                  ]
+                },
+            8 : { id: 8,
+                  name: 'Dreibla',
+                  latname: 'Trebla trebli max.' }
+          }; 
+
+
+      factory.getPlantList = function () {
+        return plants;
+      };    
+
+      factory.addPlant = function ( plant ) {
+        plants.push( plant );
+        return plants;
+      };  
+
+      factory.newPlantId = function () {
+        return plants.length + 1;
+      };     
 
       factory.getPlantDetails = function (id) {
         var plant = plants[id] || null;
@@ -40,14 +64,15 @@ angular.module('krautli_yoApp')
 
       return factory;
   })
-  .controller('PlantDetailsController', function ($scope, $route, $routeParams, plantDetailsFactory) {
+  .controller('PlantDetailsController', function ($scope, $route, $routeParams, plantsFactory) {
 
     // At the mpment we take all the needed Info from URL PArams which is uncool
     var plantId = $routeParams.plantID || "#",
-        plant = plantDetailsFactory.getPlantDetails(plantId);
+        plant = plantsFactory.getPlantDetails(plantId);
 
     $scope.plant = {};    
     $scope.plant.name = plant.name || "";
+    $scope.plant.latname = plant.latname || "n.a."
     $scope.plant.id   = plant.id || "#";
     $scope.plant.isOwnPlant = plant.own || false;
     $scope.plant.locations = plant.locations || [];
@@ -58,7 +83,7 @@ angular.module('krautli_yoApp')
 
       newPosition.range = $scope.radius;
 
-      $scope.plant.locations = plantDetailsFactory.addPlantPositon( plantId, newPosition );
+      $scope.plant.locations = plantsFactory.addPlantPositon( plantId, newPosition );
     };
     
   });
