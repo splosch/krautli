@@ -4,29 +4,38 @@ angular.module('krautli_yoApp')
   .factory('plantsFactory', function () {
       var factory = {},
           // plants shall be fetched via network and persisted as objects locally
-          plants = { 
-            1 : { id: 1,
-                  name: 'Ackergauchheil',
-                  latname: 'Botansi ackergauli sanctum' },
-            2 : { id: 2,
-                  name: 'Arnika',
-                  latname: 'Fevelus satinum',
-                  own: true },
-            3 : { id: 3,
-                  name: 'Beifuss',
-                  latname: 'Vehennis lam. natus' },
-            4 : { id: 4,
-                  name: 'Eberesche', 
-                  own: true,
-                  locations: [ 
-                    { lat: '-20.223', long: '45.099' },
-                    { lat: '-13.200', long: '15.013' }
-                  ]
-                },
-            8 : { id: 8,
-                  name: 'Dreibla',
-                  latname: 'Trebla trebli max.' }
-          }; 
+          plants = [
+            { 
+              id: 1,
+              name: 'Ackergauchheil',
+              latname: 'Botansi ackergauli sanctum' 
+            },
+            { 
+              id: 2,
+              name: 'Arnika',
+              latname: 'Fevelus satinum',
+              own: true 
+            },
+            { 
+              id: 3,
+              name: 'Beifuss',
+              latname: 'Vehennis lam. natus' 
+            },
+            { 
+              id: 4,
+              name: 'Eberesche', 
+              own: true,
+              locations: [ 
+                { lat: '-20.223', long: '45.099' },
+                { lat: '-13.200', long: '15.013' }
+              ]
+            },
+            { 
+              id: 8,
+              name: 'Dreibla',
+              latname: 'Trebla trebli max.' 
+            }
+          ]; 
 
 
       factory.getPlantList = function () {
@@ -40,26 +49,35 @@ angular.module('krautli_yoApp')
 
       factory.newPlantId = function () {
         return plants.length + 1;
-      };     
+      }; 
 
-      factory.getPlantDetails = function (id) {
-        var plant = plants[id] || null;
+      factory.getPlantById = function (id) {
+        var foundPlant; 
 
-        plant.id = plant ? id : null ;
-
-        return plant;
-      };
-
-      factory.addPlantPositon = function ( id, pos ) {
-        var locations = [];
-
-        if (id && plants[id] && pos && pos.lat && pos.long) {
-          locations = plants[id].locations || [];
-          locations.push( pos );
-          plants[id].locations = locations;
+        if(!id){
+          return false;
         }
 
-        return locations;
+        // find plant with id = plant.id
+        plants.forEach(function(plant, index){
+          if(plant.id === id){
+            foundPlant = plant;
+          }
+        });
+
+        return foundPlant;
+      },   
+
+      factory.addPlantPositon = function ( plant, pos ) {
+        var locations = [];
+        debugger;
+        if(plant && pos && pos.lat && pos.long) {
+          locations = plant.locations || [];
+          locations.push( pos );
+          plant.locations = locations;
+        }
+
+        return plant.locations;
       };  
 
       return factory;
@@ -67,8 +85,8 @@ angular.module('krautli_yoApp')
   .controller('PlantDetailsController', function ($scope, $route, $routeParams, plantsFactory) {
 
     // At the mpment we take all the needed Info from URL PArams which is uncool
-    var plantId = $routeParams.plantID || "#",
-        plant = plantsFactory.getPlantDetails(plantId);
+    var plantId = parseInt($routeParams.plantID, 10),
+        plant = plantsFactory.getPlantById(plantId);
 
     $scope.plant = {};    
     $scope.plant.name = plant.name || "";
@@ -77,13 +95,13 @@ angular.module('krautli_yoApp')
     $scope.plant.isOwnPlant = plant.own || false;
     $scope.plant.locations = plant.locations || [];
 
-    $scope.savePlantPosition = function ( plantId ) {
+    $scope.savePlantPosition = function () {
       var position = { lat: '-14.22736', long: '45.22341' },
           newPosition = position || {};
 
       newPosition.range = $scope.radius;
 
-      $scope.plant.locations = plantsFactory.addPlantPositon( plantId, newPosition );
+      $scope.plant.locations = plantsFactory.addPlantPositon( plant, newPosition );
     };
     
   });
