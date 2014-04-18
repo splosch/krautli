@@ -136,8 +136,9 @@ ul.thumbnails > li:last-child {
 
 
 .encycl.splash-screen {
-  background: url("/img/krautli_splash.png") no-repeat -15px center white;
+  background: url("/img/krautli_splash.png") no-repeat center #F5F5F5;
   height: 510px;
+  background-size: auto 100%;
 }
 
 .splash-container {
