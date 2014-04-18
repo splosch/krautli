@@ -120,20 +120,28 @@ ul.thumbnails > li:last-child {
 }
 
 /* Restyle the bootstrap search query field */
+.encycl .navbar-inner {
+  position: relative;
+}
+
+.encycl .navbar-search {
+  width: 100%;
+  padding-right: 120px;
+  box-sizing: border-box;
+}
+
+.encycl .navbar-search + .btn-group {
+  position: absolute;
+  top: 0;
+  right: 20px;
+}
+
 .encycl .navbar-search .search-query {
   width: 100%;
   margin-right: 20px;
   box-sizing: border-box;
   height: 30px;
 }
-
-.navbar-search + .btn-group > .btn{
-  box-sizing: border-box;
-  height: 30px;
-  line-height: initial;
-  margin-left: 2px;
-}
-
 
 .encycl.splash-screen {
   background: url("/img/krautli_splash.png") no-repeat center #F5F5F5;
