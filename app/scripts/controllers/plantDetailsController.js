@@ -70,7 +70,7 @@ angular.module('krautli_yoApp')
 
       factory.addPlantPositon = function ( plant, pos ) {
         var locations = [];
-        debugger;
+
         if(plant && pos && pos.lat && pos.long) {
           locations = plant.locations || [];
           locations.push( pos );
@@ -82,7 +82,7 @@ angular.module('krautli_yoApp')
 
       return factory;
   })
-  .controller('PlantDetailsController', function ($scope, $route, $routeParams, plantsFactory) {
+  .controller('PlantDetailsController', function ($scope, $route, $routeParams, plantsFactory, storage) {
 
     // At the mpment we take all the needed Info from URL PArams which is uncool
     var plantId = parseInt($routeParams.plantID, 10),

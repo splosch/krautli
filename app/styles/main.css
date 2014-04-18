@@ -119,6 +119,21 @@ ul.thumbnails > li:last-child {
     width: 100%;
 }
 
+/* Restyle the bootstrap search query field */
+.encycl .navbar-search .search-query {
+  width: 100%;
+  margin-right: 20px;
+  box-sizing: border-box;
+  height: 30px;
+}
+
+.navbar-search + .btn-group > .btn{
+  box-sizing: border-box;
+  height: 30px;
+  line-height: initial;
+  margin-left: 2px;
+}
+
 
 /* 
     Example section 
