@@ -135,6 +135,23 @@ ul.thumbnails > li:last-child {
 }
 
 
+.encycl.splash-screen {
+  background: url("/img/krautli_splash.png") no-repeat -15px center white;
+  height: 510px;
+}
+
+.splash-container {
+  position: relative;
+  top: 350px;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.splash-container > .btn {
+
+
+}
+
 /* 
     Example section 
     "PaperEncycl-Theme" 

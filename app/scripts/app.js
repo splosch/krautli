@@ -12,6 +12,10 @@ angular.module('krautli_yoApp', [
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       })
+      .when('/start', {
+        templateUrl: 'views/start.html',
+        controller: 'MainCtrl'
+      })
       .when('/suggestName', {
         templateUrl: 'views/suggestName.html',
         controller: 'SuggestNameController'
