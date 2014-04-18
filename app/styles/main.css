@@ -197,7 +197,7 @@ section {
 }
 
 .encycl a {
-  color: #5F9C11;
+  /* color: #5F9C11; */
   font-family: 'PT Sans', sans-serif;
   text-decoration: none;
 }
@@ -234,7 +234,7 @@ section {
   font-weight:400;
 }
 
-.encycl button,.encycl .btn {
+.xencycl button,.xencycl .btn {
   display: inline-block;
   padding: 6px 12px;
   margin-bottom: 0;
@@ -252,13 +252,13 @@ section {
 }
 
 
-.encycl .btn {
+.xencycl .btn {
   color: #e5ede0;
   background-color: #404040;
   border-color: #fff;
 }
   
-.encycl .btn:hover {
+.xencycl .btn:hover {
   background-color: #606060;
   border-color: #fff;
 }
@@ -268,12 +268,12 @@ section {
 }
 
 
-.encycl .btn-primary {
+.xencycl .btn-primary {
   color: #e5ede0;
   background-color: #202020;
   border-color: #fff;
 }  
-.encycl .btn-primary:hover {
+.xencycl .btn-primary:hover {
   background-color: #404040;
   border-color: #fff;
 }
