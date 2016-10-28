@@ -9,38 +9,38 @@
     <script src="http://isithackday.com/hacks/geo/yql-geo-library/yqlgeo.js"></script>
     <!--script src="js_view/main.js"></script-->
     <script src="ext_res/lib/modernizr1.7.min.js"></script>
- 
+
 </head>
 
 <body>
-    
+
 <div id="pagewrapper">
     <section id="krautli" class="app region">
         <label for="herbalName">Pflanzenname:</label>
-        <input id="herbalName" type="text" list="herbalNames" autocomplete="off" refId="" /> 
+        <input id="herbalName" type="text" list="herbalNames" autocomplete="off" refId="" />
         <button id="btnInit" class="log">
             <span>Fundort speichern</span>
         </button>
     </section>
-    
+
     <section class="app region">
         <ul id="messages">
         </ul>
     </section>
-        
+
 <script type="text/javascript">
 
     var MyHerbStuff = function(app){
-        
+
         this.helpers({
             initLocalHerbs2: function(ha) {
                 console.log("helperFnc");
-                this.trigger('statusMsg', {type:"initApp", msg:"Hi I'm Krautlis Herbal Resource. ", log:"INIT: MyHerbStuff()"});    
+                this.trigger('statusMsg', {type:"initApp", msg:"Hi I'm Krautlis Herbal Resource. ", log:"INIT: MyHerbStuff()"});
             }
         });
-        
-    
-        
+
+
+
         /*
             as an performant improvement, provide data-storage on capable browsers offline storage
             //["Url http://www.kaesekessel.de/kraeuter/", "geschützt", "Name", "Jan", "Feb", "März", "Apr", "Mai", "Jun", "Jul", "Aug", "Sept", "Okt", "Nov", "Dez", "Gefahr", "Anwendung", "Gebiete"]
@@ -52,7 +52,7 @@
                 hObjs = {},
                 suggestedHerbs = [],
                 i;
-            
+
             for(var h in ha){
                 hObjs[h] = {};
                 hObjs[h].url = ha[h][0];
@@ -62,29 +62,29 @@
                 hObjs[h].hazardous = ha[h][15];
                 hObjs[h].usage = ha[h][16];
                 hObjs[h].loc_desc = ha[h][17];
-                
+
                 //fill calender month
                 for(i == 3; i < 15; i++){
                     hObjs[h].cal.push(ha[h][i] || "");
                 }
-        
+
                 //push global suggestions (not goood :))
                 if (h !== 0){
                     suggestedHerbs.push({name : ha[h][2], refId : h});
                 }
             }
-        
+
             herbData.obj = hObjs;
             herbData.list = suggestedHerbs;
-        
+
             if(herbData.obj && herbData.list.length > 0){
                 app.trigger('statusMsg', {type:"initApp", msg:"Es stehen "+ herbData.list.length +" zur Verfügung.", log:"DONE: initLocalHerbs"});
             }else{
-                app.trigger('errorMsg', {type:"initApp", msg:"Es wurden keine Pflanzendaten gefunden", log:"FAIL: initLocalHerbs"});        
+                app.trigger('errorMsg', {type:"initApp", msg:"Es wurden keine Pflanzendaten gefunden", log:"FAIL: initLocalHerbs"});
             }
             return herbData;
         };
-        
+
         /*
          * Clientside support for suggesting Herbals by name while typing
          * this function uses a datalist to provide browserpowered suggestions
@@ -100,18 +100,18 @@
                     $("#" + dataListId).append("<option refId='" + h + "' value='" + hObjs[h].name + "' />");
                 }
             }
-            
+
             if($("#" + dataListId).children()[0]){
                 app.trigger('statusMsg', {type:"initApp", msg:"Liste mit "+ $("#" + dataListId).children().length +" Kräutern erstellt.", log:"DONE: suggestHerbals"});
             }else{
-                app.trigger('errorMsg', {type:"initApp", msg:"Es konnte keine Vorschläge erstellt werden.", log:"FAIL: suggestHerbals"});        
+                app.trigger('errorMsg', {type:"initApp", msg:"Es konnte keine Vorschläge erstellt werden.", log:"FAIL: suggestHerbals"});
             }
         }
-        
+
     };
-        
+
         var krautliApp = $.sammy(function() {
-            
+
             var herbs = [["Url http://www.kaesekessel.de/kraeuter/", "geschützt", "Name", "Jan", "Feb", "März", "Apr", "Mai", "Jun", "Jul", "Aug", "Sept", "Okt", "Nov", "Dez", "Gefahr", "Anwendung", "Gebiete"],
 ["a/ackergauchheil.htm", "", "Ackergauchheil", "", "", "", "", "", "Kraut", "Kraut", "Kraut", "Kraut", "Kraut", "", "", "X", "", "Lehmboden, Acker- und Gartenland"],
 ["a/ackerschachtelhalm.htm", "", "Ackerschachtelhalm", "", "", "", "", "Triebe", "Triebe", "", "", "", "", "", "", "", "", ""]
@@ -122,33 +122,33 @@
                 // No route defined, set location to '#/' to trigger app automatically:
                 document.location.hash = '/';
             });
-            
+
             // Catch-all for 404 errors:
-                this.get(/.*/, function() { 
+                this.get(/.*/, function() {
                 console.log('404... come on, really?');
             });
-            
+
              /*
             Display relevant Status Messages of the App while Running
             */
             function handleMessages(type, msgContainer){
                 var msg_container = $("#messages"),
                     msgObject = [];
-                    
+
                 if(type == "statusMsg" || type == "errorMsg"){
                     msg_container.append("<li>"+ msgContainer.msg +"</li>");
                 }
-                
+
                 if(msgContainer && msgContainer.log){
                     console.log(type+" : "+msgContainer.log);
                 }
-                                
-    		}
-            
-            this.use(MyHerbStuff);    
 
-            
-            
+    		}
+
+            this.use(MyHerbStuff);
+
+
+
             // Todo: restrictions for execution--> build datalist - this should be only done if AJAX powered async data fetching && datalist feature available, otherwise use autosuggest or server side datalist rendering
             //suggestHerbals(herbs);
 
@@ -156,27 +156,27 @@
                 handleMessages(e.type, data);
             });
             this.bind('errorMsg', function(e, data){
-                handleMessages(e.type, data);    
+                handleMessages(e.type, data);
             });
-            
 
-            
+
+
             // listen to all events
             this.bindToAllEvents(function(e, data) {
                 //handleMessages(e.type, data);
             });
-            
-            
+
+
             this.trigger('statusMsg', {type:"initApp", msg:"Bla!", log:"Bla: handleMessages() "});
-    
+
         });
-        
-    
+
+
         $(function() {
            var  db,
                 herbs = herbs || [];
-            
-           krautliApp.run(); 
+
+           krautliApp.run();
            krautliApp.trigger('statusMsg', {type:"initApp", msg:"Los gehts Messages!", log:"INIT: handleMessages() "});
            herbs = krautliApp.initLocalHerbs(herbs);
            krautliApp.suggestHerbals(herbs)
@@ -191,13 +191,13 @@
 
 
 
-        
-        
-    
-    
+
+
+
+
 
     </script>
-    
+
     <section id="progress" class="doc region">
         <h4>Some Topics I'm currently dealing with</h4>
         <ul id="topics">
@@ -210,8 +210,8 @@
             <li><a href="#info_interfaceDesign">UI: the Interface Design</a> : stuff to considder while planning the html / ui</li>
     		<li><a href="#info_herbalAppIdea">Idea: Kräutli-App</a> : What? Why? How?</li>
         </ul>
-        
-		
+
+
 		<article id="info_localStorage">
             <h4>API: LocalStorage</h4>
 			<p class="caption">
@@ -221,7 +221,7 @@
 			<code>
 /**
  * A persistant object class using localStorage
- * 
+ *
  * Copyright Oliver Caldwell 2011 (olivercaldwell.co.uk)
  * http://olivercaldwell.co.uk/?p=89
  */
@@ -242,12 +242,12 @@ function PersistantObject(key) {
 PersistantObject.prototype.setKey = function(key) {...};
 PersistantObject.prototype.load   = function() {...};
 PersistantObject.prototype.erase  = function() {...};
-PersistantObject.prototype.save   = function() {...};				
+PersistantObject.prototype.save   = function() {...};
 			</code>
-		</article> 
-		 
-		 
-        
+		</article>
+
+
+
 		<article id="code_eventEmitter">
             <h4>Event System: emit & dispatch Events / Messages</h4>
 			<p class="caption">
@@ -258,7 +258,7 @@ PersistantObject.prototype.save   = function() {...};
 				These are really the heart of building great extensible UIs. This means utilising the Observer pattern in your objects. I also like to think of it in pubsub terms: a custom event has 2 parts, the trigger (publisher), and the events which are bound to it (subscribers).<br>
 				Create a convention for events which you are going to stick to...
 			</q>
-			
+
             <p>
 				My App-internal communication wishlist:
 				<ul>
@@ -282,9 +282,9 @@ PersistantObject.prototype.save   = function() {...};
 				<li>again a nice Post from the Bamboo Blog about <a href="http://moro.heroku.com/2010/7/14/custom-event-emitters-in-javascript">Custom event emitters in Javascript</a></li>
 			</ul>
 		</article>
-		
-		
-        
+
+
+
         <article id="code_websql">
             <h4>DataStorage: WebSQL Database to store data on Client (Offline mode by default)</h4>
             <p>
@@ -307,7 +307,7 @@ function initDB(){
                 maxSize = 65536,
                 db = openDatabase(shortName, version, displayName, maxSize);
                 // You should have a database instance in db.
-            
+
             createTables(db);
             return db;
         }
@@ -321,23 +321,23 @@ function initDB(){
         }
         return null;
     }
-}            
+}
             </code>
-            
+
             <p class="caption">
                 helper methods for db & query handling
             </p>
             <code>
-function nullDataHandler(transaction, results) { 
+function nullDataHandler(transaction, results) {
     //
 }
-        
+
 function errorHandler(transaction, error)
 {
     alert('Oops.  Error was '+error.message+' (Code '+error.code+')');
     // Handle errors here
     var we_think_this_error_is_fatal = true;
-    if (we_think_this_error_is_fatal){ 
+    if (we_think_this_error_is_fatal){
         return true;
     }
 
@@ -358,7 +358,7 @@ function dataHandler(transaction, results)
     alert(string);
 }
         </code>
-            
+
         <p class="caption">
             create the initial tables
         </p>
@@ -380,7 +380,7 @@ function createTables(db){
     }
 }
         </code>
-            
+
         <p class="caption">
             Yeahhh! Do something with the Data // storePlantPos & getAllPlants
         </p>
@@ -388,7 +388,7 @@ function createTables(db){
 function storePlantPos(db, position, plantObj){
     if(db){
         plantname = plantObj.name?plantObj.name:"Pflanze_X";
-    
+
         db.transaction(
             function (transaction) {
                 transaction.executeSql('insert into plantpositions (name, pos_long, pos_lat) VALUES ("'+plantname+'", "'+position.coords.longitude+'", "'+position.coords.latitude+'");', [], nullDataHandler, errorHandler);
@@ -400,7 +400,7 @@ function storePlantPos(db, position, plantObj){
         console.Error("storePlantPos(db, position, plantname) - FAILED - No DB found");
     }
 }
-        
+
 function getAllPlants(){
     db.transaction(
         function (transaction) {
@@ -411,13 +411,13 @@ function getAllPlants(){
     );
 }
         </code>
-           
+
 		<ul class="links">
 			<li>WebSQL basics 1st <a href="http://html5doctor.com/introducing-web-sql-databases/"  target="_blank">Introducing WebSQL Databases/</a></li>
 			<li>WebSQL basics 2nd <a href="http://marakana.com/forums/html5/general/208.html" target="_blank">HTML5 related APIs : WebSQL</a></li>
 		</ul>
 	</article>
-    
+
         <article id="code_geolocation">
             <h4>Location API: store the plantposition</h4>
             <p>
@@ -426,7 +426,7 @@ function getAllPlants(){
             </p>
             <p class="caption">get the dependencies...</p>
             <code>
-&lt;script src="http://isithackday.com/hacks/geo/yql-geo-library/yqlgeo.js"&gt;&lt;/script&gt;                
+&lt;script src="http://isithackday.com/hacks/geo/yql-geo-library/yqlgeo.js"&gt;&lt;/script&gt;
             </code>
             <p class="caption">
                 gps data from the navigator.geolocation || network based position aquiry via yqlgeo library<br>
@@ -447,7 +447,7 @@ function initiate_geolocation() {
 
 function handle_geolocation_query(position){
     if (!position.error){
-        var image_url = "http://maps.google.com/maps/api/staticmap?sensor=false&amp;center=" + position.coords.latitude + ',' + position.coords.longitude + 
+        var image_url = "http://maps.google.com/maps/api/staticmap?sensor=false&amp;center=" + position.coords.latitude + ',' + position.coords.longitude +
                         "&amp;zoom=14&amp;size=300x400&amp;markers=color:blue|label:S|" + position.coords.latitude + ',' + position.coords.longitude;
 
         jQuery("#map").remove();
@@ -460,10 +460,10 @@ function handle_geolocation_query(position){
     }
 
     storePlantPos(db, position, getChoosenPlant());
-}    
+}
             </code>
         </article>
-    
+
         <article id="code_autosuggest">
             <h4>UI: autosuggest / autocomplete</h4>
             <p>This feature was in main focus even in the beginning of the Project becaus eit helps to get an idea of how to handle all the different herbs, without bothering the user too much with typing (*mobile device pain*)</p>
@@ -471,7 +471,7 @@ function handle_geolocation_query(position){
             <code>
 &lt;script src="jquery.autocomplete.js"&gt;&lt;/script&gt;
             </code>
-            
+
             <p class="caption">
                 This currently gets the autosuggest Plugin running. <br>
                 The initial approach was to use the <a href="http://www.roseindia.net/tutorial/html/html5/HTML5DatalistTag.html"  target="_blank">HTML5 datalist feature</a> (<a href="http://www.quackit.com/html_5/tags/html_datalist_tag.cfm">datalist demo</a>) that builds up hidden list of possible obtions that the user can enter in the input-field. Since the support for that feature is not that great :(, and no lightweight <a href="https://github.com/Modernizr/Modernizr/wiki/HTML5-Cross-Browser-Polyfills">datalist polyfill (search for "datalist")</a>
@@ -480,7 +480,7 @@ function handle_geolocation_query(position){
             </p>
             <p class="caption">
                 the autosuggest plugin gets some cleaned up version of the suggested herbs<br>
-                *better: get them from the datalist or at least the same source object to avoid this messy code/data duplication 
+                *better: get them from the datalist or at least the same source object to avoid this messy code/data duplication
             </p>
             <code>
 function initLocalHerbs(ha){
@@ -500,9 +500,9 @@ function initLocalHerbs(ha){
  */
 function suggestHerbals(hObjs){
     var dataListId = "herbalNameData";
-    
+
     $("#herbalName").after("&lt;datalist id='"+dataListId+"'&gt;&lt;/datalist&gt;");
-    
+
     for(h in hObjs){
         //skip the first (not the best implementation to always exec that condition...)
         if(h != 0 && hObjs[h] && hObjs[h].name){
@@ -543,7 +543,7 @@ $().ready(function() {
         autoFill: false,
         formatItem: function(row, i, max) {
             return row.name + " °" + row.refId;
-        }, 
+        },
         formatMatch: function(row, i, max) {
             return row.name;
         },
@@ -555,9 +555,9 @@ $().ready(function() {
     // ...
 });
             </code>
-            
+
         </article>
-		
+
 		<article id="code_initLocalHerbs">
 			<h4>Data: some example plants to work with</h4>
 			<p>
@@ -568,10 +568,10 @@ $().ready(function() {
             <code>
 function initLocalHerbs(ha){
 //SOURCE: ["Url http://www.kaesekessel.de/kraeuter/", "geschützt", "Name", "Jan", "Feb", "März", "Apr", "Mai", "Jun", "Jul", "Aug", "Sept", "Okt", "Nov", "Dez", "Gefahr", "Anwendung", "Gebiete"]
-    
+
     // Todo: move to server side (evtl.) This Object can be provided by Server - Cliend side parsing is for Prototyping only
     var hObjs = {};
-    
+
     for(h in ha){
         hObjs[h] = {};
         hObjs[h]["url"] = ha[h][0];
@@ -581,7 +581,7 @@ function initLocalHerbs(ha){
         hObjs[h]["hazardous"] = ha[h][15];
         hObjs[h]["usage"] = ha[h][16];
         hObjs[h]["loc_desc"] = ha[h][17];
-        
+
         //fill calender month
         for(i = 3; i &lt; 15; i++){
             hObjs[h]["cal"].push(ha[h][i] || "");
@@ -595,9 +595,9 @@ function initLocalHerbs(ha){
 
     return hObjs;
 }
-            </code>        
+            </code>
         </article>
-        
+
 		<article id="info_interfaceDesign">
             <h4>UI: the Interface Design</h4>
             <p>
@@ -605,13 +605,13 @@ function initLocalHerbs(ha){
 				Still, the frontend is very simple, and I'd like to keep it like that untill really needed changes drive design decissions.
 				The Application should run on all kinds of plattform (device/browser) so there will be various ways how to display things...
 			<p>
-			
+
 			<ul class="links">
 				<li>Dealing with all kinds of possible layouts - a simple boilerplate: <a href="http://www.getskeleton.com">http://www.getskeleton.com</a></li>
 			<ul>
-		</article>	
+		</article>
 
-		
+
         <article id="info_herbalAppIdea">
             <h4>Idea: What? Why? How?</h4>
             <p>
@@ -678,12 +678,12 @@ function initLocalHerbs(ha){
 						</ul>
 					</li>
 				</ol>
-					
-			</p>            
-        </article>
-        
 
-    
+			</p>
+        </article>
+
+
+
         <section id="reference">
             <h4>Links and Resources for further reading</h4>
             <ul id="links">
@@ -691,13 +691,13 @@ function initLocalHerbs(ha){
                 <li>cloud9ide an "use everywhere IDE" with Github integration <a href="http://c9.io/" target="_blank">http://c9.io/</a></li>
 				<li>js-model is a library built on top of jQuery that allows you to work with models <a href="http://benpickles.github.com/js-model/" target="_blank">Github: js-model/</a></li>
 				<li>Adding a Model layer to your Javascript / MVC <a href="http://blog.new-bamboo.co.uk/2010/3/7/the-js-model-layer" target="_blank">the-js-model-layer</a></li>
-				
-				
+
+
             </ul>
         </section>
-    
+
     </section>
-	
+
 	<footer>
 		<div class="wrapper">
 			<a href="mailto:sploscho@web.de" title="send mail for kraeutli contact">Mario Winkler</a>
@@ -705,8 +705,8 @@ function initLocalHerbs(ha){
 	</footer>
 
     </div>
-    
 
-    
+
+
   </body>
 </html>
