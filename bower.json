@@ -2,21 +2,23 @@
   "name": "krautli_yo",
   "version": "0.0.2",
   "dependencies": {
-    "angular": "~1.2.0-rc.2",
-    "json3": "~3.2.4",
-    "jquery": "~1.9.1",
-    "bootstrap-sass": "~2.3.1",
-    "es5-shim": "~2.0.8",
-    "angular-resource": "~1.2.0-rc.2",
-    "angular-bootstrap": "~0.6.0",
-    "angular-cookies": "~1.2.0-rc.2",
-    "angular-sanitize": "~1.2.0-rc.2"
+    "angular": "^1.6.5",
+    "json3": "^3.3.2",
+    "jquery": "^3.2.1",
+    "bootstrap-sass": "^3.3.7",
+    "es5-shim": "^4.5.9",
+    "angular-resource": "^1.6.5",
+    "angular-bootstrap": "^2.5.0",
+    "angular-cookies": "^1.6.5",
+    "angular-sanitize": "^1.6.5",
+    "angular-route": "^1.6.5",
+    "angularLocalStorage": "^0.3.2"
   },
   "devDependencies": {
-    "angular-mocks": "~1.2.0-rc.2",
-    "angular-scenario": "~1.2.0-rc.2"
+    "angular-mocks": "^1.6.5",
+    "angular-scenario": "^1.6.5"
   },
   "resolutions": {
-    "angular": "1.2.1"
+    "angular": "1.6.5"
   }
 }
